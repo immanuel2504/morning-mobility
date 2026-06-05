@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+<meta name="theme-color" content="#0a0f1d" />
+<meta name="description" content="Morning Mobility — a guided daily routine for posture, mobility and strength." />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Morning Mobility" />
+<meta name="mobile-web-app-capable" content="yes" />
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="icon" type="image/svg+xml" href="icon.svg" />
+<link rel="apple-touch-icon" href="icon.svg" />
+<title>Morning Mobility · Daily Routine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* dark theme (default) */
+    --bg: #0a0f1d;
+    --bg-grad-1: #16213f;
+    --bg-grad-2: #0e1830;
+    --surface: #131d33;
+    --surface-2: #1a2742;
+    --surface-3: #213151;
+    --border: #26334f;
+    --border-soft: #1e2b45;
+    --text: #eef2fb;
+    --muted: #93a3c4;
+    --faint: #6c7c9e;
+    --brand: #5eead4;
+    --brand-2: #818cf8;
+    --brand-ink: #06121f;
+    --good: #34d399;
+    --warn: #fbbf24;
+    --danger: #fb7185;
+    --ring-track: #1b2740;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.3), 0 2px 8px rgba(0,0,0,.22);
+    --shadow-md: 0 6px 16px rgba(0,0,0,.32);
+    --shadow-lg: 0 18px 48px rgba(0,0,0,.45);
+    --shadow-brand: 0 10px 28px rgba(94,234,212,.25);
+    --r-sm: 12px; --r-md: 16px; --r-lg: 22px; --r-xl: 28px;
+    --nav-h: 66px;
+    --ease: cubic-bezier(.22,.61,.36,1);
+  }
+  html[data-theme="light"] {
+    --bg: #eef1f8;
+    --bg-grad-1: #dfe7fb;
+    --bg-grad-2: #eaf0fe;
+    --surface: #ffffff;
+    --surface-2: #f3f6fc;
+    --surface-3: #e9eefa;
+    --border: #e1e8f3;
+    --border-soft: #edf1f8;
+    --text: #14223b;
+    --muted: #5f6f8c;
+    --faint: #92a0ba;
+    --brand: #14b8a6;
+    --brand-2: #6366f1;
+    --brand-ink: #ffffff;
+    --good: #10b981;
+    --warn: #d97706;
+    --danger: #e11d48;
+    --ring-track: #e6ecf6;
+    --shadow-sm: 0 1px 2px rgba(20,34,59,.06), 0 2px 10px rgba(20,34,59,.06);
+    --shadow-md: 0 8px 24px rgba(20,34,59,.10);
+    --shadow-lg: 0 24px 60px rgba(20,34,59,.16);
+    --shadow-brand: 0 12px 30px rgba(20,184,166,.28);
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background:
+      radial-gradient(1100px 560px at 88% -12%, var(--bg-grad-1) 0%, transparent 58%),
+      radial-gradient(900px 480px at -12% 6%, var(--bg-grad-2) 0%, transparent 55%),
+      var(--bg);
+    background-attachment: fixed;
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom) + 14px);
+    letter-spacing: -0.01em;
+    transition: background-color .3s var(--ease), color .3s var(--ease);
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; padding: max(16px, env(safe-area-inset-top)) 16px 0; }
+
+  /* ---------- Top bar ---------- */
+  .topbar { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom: 16px; padding-top: 4px; }
+  .brand { display:flex; align-items:center; gap:9px; font-weight:800; font-size:1.02rem; letter-spacing:-.02em; }
+  .brand .logo { width:34px; height:34px; border-radius:10px; display:grid; place-items:center; font-size:1.1rem;
+    background: linear-gradient(135deg, var(--brand), var(--brand-2)); box-shadow: var(--shadow-brand); }
+  .topbar-actions { display:flex; gap:8px; }
+  .icon-btn { width:42px; height:42px; border-radius:13px; border:1px solid var(--border); cursor:pointer;
+    background: var(--surface); color: var(--text); font-size:1.15rem; display:grid; place-items:center;
+    transition: transform .15s var(--ease), background .2s, border-color .2s; box-shadow: var(--shadow-sm); }
+  .icon-btn:hover { border-color: var(--brand); }
+  .icon-btn:active { transform: scale(.92); }
+
+  /* ---------- Install banner ---------- */
+  .install-banner { display:flex; align-items:center; justify-content:space-between; gap:12px;
+    background: linear-gradient(135deg, rgba(94,234,212,.14), rgba(129,140,248,.16));
+    border:1px solid var(--border); border-radius: var(--r-md); padding: 12px 14px; margin-bottom: 16px;
+    box-shadow: var(--shadow-sm); animation: slideDown .35s var(--ease); }
+  @keyframes slideDown { from{opacity:0; transform:translateY(-8px)} to{opacity:1; transform:none} }
+  .install-banner .ib-txt { font-size:.86rem; font-weight:600; line-height:1.35; }
+  .install-banner .ib-txt small { display:block; color:var(--muted); font-weight:500; font-size:.74rem; margin-top:2px; }
+  .install-banner .ib-act { display:flex; align-items:center; gap:6px; flex:0 0 auto; }
+  .ib-install { border:none; border-radius:10px; padding:9px 14px; font-weight:800; font-size:.82rem; cursor:pointer;
+    background: linear-gradient(135deg, var(--brand), var(--brand-2)); color:var(--brand-ink); }
+  .ib-x { width:32px; height:32px; border-radius:9px; border:1px solid var(--border); background:transparent; color:var(--muted); cursor:pointer; }
+
+  /* ---------- Hero ---------- */
+  .hero { background: var(--surface); border:1px solid var(--border); border-radius: var(--r-xl);
+    padding: 18px; box-shadow: var(--shadow-md); margin-bottom: 20px; position:relative; overflow:hidden; }
+  .hero:before { content:""; position:absolute; inset:0; background:
+    radial-gradient(420px 180px at 90% -40%, rgba(129,140,248,.18), transparent 70%); pointer-events:none; }
+  .hero-head { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; position:relative; }
+  .hero-greet { font-size:1.32rem; font-weight:800; letter-spacing:-.02em; }
+  .hero-greet small { display:block; color:var(--muted); font-size:.8rem; font-weight:500; margin-top:3px; letter-spacing:0; }
+  .chip-streak { display:flex; align-items:center; gap:6px; background: var(--surface-2);
+    border:1px solid var(--border); border-radius:999px; padding:7px 12px; font-weight:800; font-size:.95rem; flex:0 0 auto; }
+  .chip-streak small { color:var(--muted); font-weight:600; font-size:.68rem; }
+
+  .hero-main { display:flex; align-items:center; gap:18px; margin-top:18px; position:relative; }
+  .ring-mini { position:relative; width:118px; height:118px; flex:0 0 auto; }
+  .ring-mini svg { width:100%; height:100%; transform: rotate(-90deg); }
+  .ring-mini .rm-track { fill:none; stroke: var(--ring-track); stroke-width:11; }
+  .ring-mini .rm-prog { fill:none; stroke: url(#grad); stroke-width:11; stroke-linecap:round;
+    transition: stroke-dashoffset .6s var(--ease); }
+  .ring-mini .rm-center { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .ring-mini .rm-center b { font-size:1.7rem; font-weight:800; font-variant-numeric:tabular-nums; }
+  .ring-mini .rm-center small { color:var(--muted); font-size:.66rem; font-weight:600; text-transform:uppercase; letter-spacing:.7px; }
+  .hero-info { flex:1; min-width:0; }
+  .hero-count { font-size:1.05rem; font-weight:700; }
+  .hero-count b { font-size:1.5rem; }
+  .hero-sub { color:var(--muted); font-size:.82rem; margin-top:1px; }
+  .hero-actions { display:flex; gap:9px; margin-top:14px; }
+  .hero-actions .btn { flex:1; padding:13px 10px; font-size:.95rem; }
+
+  /* ---------- Buttons ---------- */
+  .btn { border:none; border-radius:14px; padding:14px 18px; font-size:1rem; font-weight:700; cursor:pointer;
+    color: var(--brand-ink); background: linear-gradient(135deg, var(--brand), var(--brand-2));
+    box-shadow: var(--shadow-brand); width:100%; transition: transform .14s var(--ease), box-shadow .2s, filter .2s;
+    font-family:inherit; letter-spacing:-.01em; }
+  .btn:hover { filter: brightness(1.04); }
+  .btn:active { transform: scale(.97); }
+  .btn.secondary { background: var(--surface-2); color: var(--text); border:1px solid var(--border); box-shadow:none; }
+  .btn.ghost { background: transparent; color: var(--text); border:1px solid var(--border); box-shadow:none; }
+
+  /* ---------- Section titles ---------- */
+  .sec-title { font-size:1.12rem; font-weight:800; letter-spacing:-.02em; margin: 4px 2px 14px; display:flex; align-items:center; gap:8px; }
+  .hint { color: var(--muted); font-size:.82rem; line-height:1.55; margin: 12px 2px 20px; }
+
+  /* ---------- Phase + exercise cards ---------- */
+  .phase { margin-bottom: 20px; }
+  .phase-h { display:flex; align-items:center; gap:10px; margin: 4px 2px 11px; }
+  .phase-h .num { font-size:.64rem; color: var(--brand); font-weight:900; letter-spacing:1.2px; text-transform:uppercase;
+    background: color-mix(in srgb, var(--brand) 14%, transparent); padding:3px 8px; border-radius:7px; }
+  .phase-h h3 { margin:0; font-size: .98rem; font-weight:700; color:var(--text); }
+
+  .ex-card { display:flex; align-items:center; gap:13px; background: var(--surface); border:1px solid var(--border);
+    border-radius: var(--r-md); padding: 12px; margin-bottom: 10px; cursor:pointer;
+    transition: transform .12s var(--ease), border-color .2s, box-shadow .2s; box-shadow: var(--shadow-sm); }
+  .ex-card:hover { border-color: color-mix(in srgb, var(--brand) 45%, var(--border)); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+  .ex-card:active { transform: scale(.99); }
+  .ex-card.done { border-color: color-mix(in srgb, var(--good) 45%, var(--border));
+    background: linear-gradient(135deg, color-mix(in srgb, var(--good) 10%, var(--surface)), var(--surface)); }
+  .ex-card.dim { opacity:.5; }
+  .ex-ic { font-size:1.55rem; width:46px; height:46px; display:grid; place-items:center; border-radius:13px; flex:0 0 auto;
+    background: var(--surface-2); border:1px solid var(--border-soft); }
+  .ex-meta { flex:1; min-width:0; }
+  .ex-meta .nm { font-weight:700; font-size:.96rem; letter-spacing:-.01em; display:flex; align-items:center; flex-wrap:wrap; }
+  .ex-meta .sub { font-size:.78rem; color:var(--muted); margin-top:2px; }
+  .tag { font-size:.58rem; font-weight:800; text-transform:uppercase; letter-spacing:.5px; color:var(--warn);
+    border:1px solid color-mix(in srgb, var(--warn) 45%, transparent); border-radius:6px; padding:1px 5px; margin-left:7px; }
+  .ex-check { width:27px; height:27px; border-radius:50%; border:2px solid var(--border); display:grid; place-items:center;
+    flex:0 0 auto; color: var(--good); font-size:.85rem; transition: all .2s var(--ease); }
+  .ex-card.done .ex-check { background: var(--good); border-color: var(--good); color:#04231a; }
+
+  /* ---------- Tabs (bottom nav) ---------- */
+  nav.tabs { position: fixed; bottom:0; left:0; right:0; z-index:40; display:grid; grid-template-columns: repeat(4,1fr);
+    gap:4px; background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(16px) saturate(1.4);
+    -webkit-backdrop-filter: blur(16px) saturate(1.4); border-top:1px solid var(--border);
+    padding: 9px 10px calc(9px + env(safe-area-inset-bottom)); }
+  nav.tabs button { background:none; border:none; color: var(--faint); cursor:pointer; display:flex; flex-direction:column;
+    align-items:center; gap:3px; font-size:.66rem; font-weight:700; padding:7px 4px; border-radius:13px;
+    transition: color .2s, background .2s; font-family:inherit; }
+  nav.tabs button .ic { font-size:1.3rem; line-height:1; transition: transform .2s var(--ease); }
+  nav.tabs button.active { color: var(--brand); background: color-mix(in srgb, var(--brand) 12%, transparent); }
+  nav.tabs button.active .ic { transform: translateY(-1px) scale(1.08); }
+
+  /* ---------- Sections ---------- */
+  section { display:none; }
+  section.active { display:block; animation: fade .3s var(--ease); }
+  @keyframes fade { from { opacity:0; transform: translateY(8px);} to {opacity:1; transform:none;} }
+
+  /* ---------- Checklist ---------- */
+  .check-item { display:flex; align-items:center; gap:13px; padding:13px 14px; background:var(--surface);
+    border:1px solid var(--border); border-radius:14px; margin-bottom:9px; cursor:pointer; box-shadow:var(--shadow-sm);
+    transition: transform .12s var(--ease), border-color .2s; }
+  .check-item:active { transform: scale(.99); }
+  .check-item .box { width:25px; height:25px; border-radius:8px; border:2px solid var(--border); display:grid; place-items:center;
+    flex:0 0 auto; color:var(--good); transition: all .2s var(--ease); }
+  .check-item.done { border-color: color-mix(in srgb, var(--good) 40%, var(--border)); }
+  .check-item.done .box { background:var(--good); border-color:var(--good); color:#04231a; }
+  .check-item.done .nm { color: var(--muted); text-decoration: line-through; }
+  .check-item .nm { font-size:.92rem; font-weight:600; }
+
+  /* ---------- Progress / stats ---------- */
+  .stat-grid { display:grid; grid-template-columns: repeat(3,1fr); gap:10px; margin-bottom:20px; }
+  .stat { background:var(--surface); border:1px solid var(--border); border-radius:var(--r-md); padding:16px 10px; text-align:center; box-shadow:var(--shadow-sm); }
+  .stat b { font-size:1.9rem; font-weight:800; display:block; line-height:1; }
+  .stat span { font-size:.7rem; color:var(--muted); font-weight:600; margin-top:6px; display:block; }
+  .cal-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--r-lg); padding:16px; box-shadow:var(--shadow-sm); }
+  .cal { display:grid; grid-template-columns: repeat(7,1fr); gap:6px; }
+  .cal .dow { font-size:.6rem; color:var(--faint); text-align:center; font-weight:700; text-transform:uppercase; letter-spacing:.5px; padding-bottom:2px; }
+  .cal .d { aspect-ratio:1; border-radius:9px; background:var(--surface-2); border:1px solid var(--border-soft);
+    display:grid; place-items:center; font-size:.7rem; color:var(--faint); font-weight:600; }
+  .cal .d.full { background: linear-gradient(135deg, var(--brand), var(--brand-2)); color:var(--brand-ink); font-weight:800; border:none; }
+  .cal .d.part { background: color-mix(in srgb, var(--brand) 22%, var(--surface)); color: var(--text); }
+  .cal .d.today { outline:2px solid var(--brand-2); outline-offset:1px; }
+
+  /* ---------- Weekly plan ---------- */
+  .week-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--r-lg); padding:16px 18px; margin-bottom:12px; box-shadow:var(--shadow-sm); }
+  .week-card h3 { margin:0 0 10px; font-size:1rem; font-weight:800; color: var(--brand); letter-spacing:-.01em; }
+  .week-card ul { margin:0; padding-left:18px; }
+  .week-card li { margin:6px 0; font-size:.9rem; }
+  .reset-link { display:block; text-align:center; color: var(--danger); font-size:.8rem; font-weight:600; margin:20px 0 4px; cursor:pointer; }
+
+  /* ---------- Player ---------- */
+  .player { position: fixed; inset:0; z-index:60; display:none; flex-direction:column;
+    background: radial-gradient(900px 480px at 50% -12%, var(--bg-grad-1) 0%, transparent 60%), var(--bg); }
+  .player.open { display:flex; animation: fade .25s var(--ease); }
+  .player .p-top { display:flex; align-items:center; justify-content:space-between; padding: max(14px, env(safe-area-inset-top)) 16px 10px; }
+  .player .p-top .x { background: var(--surface-2); border:1px solid var(--border); color: var(--text);
+    width:42px; height:42px; border-radius:13px; font-size:1.15rem; cursor:pointer; transition: transform .15s var(--ease); }
+  .player .p-top .x:active { transform: scale(.9); }
+  .player .p-top .count { color: var(--muted); font-size:.82rem; font-weight:700; letter-spacing:.3px; }
+  .p-progress { height:4px; background: var(--ring-track); margin: 0 16px 6px; border-radius:999px; overflow:hidden; }
+  .p-progress > i { display:block; height:100%; width:0%; border-radius:999px; background: linear-gradient(90deg, var(--brand), var(--brand-2)); transition: width .4s var(--ease); }
+  .p-body { flex:1; overflow-y:auto; padding: 10px 22px 22px; display:flex; flex-direction:column; }
+  .p-phase { color: var(--brand); font-size:.7rem; font-weight:800; letter-spacing:1.1px; text-transform:uppercase; }
+  .p-name { font-size:1.85rem; font-weight:800; margin:7px 0 5px; line-height:1.12; letter-spacing:-.02em; }
+  .p-prescr { color: var(--muted); font-size:.95rem; margin-bottom:18px; }
+  .p-side-badge { display:inline-block; background: color-mix(in srgb, var(--brand-2) 18%, transparent); color:var(--text);
+    border:1px solid var(--border); border-radius:999px; padding:5px 13px; font-size:.8rem; font-weight:700; margin-bottom:16px; }
+
+  .ring-wrap { display:grid; place-items:center; margin: 6px 0 18px; }
+  .ring { position: relative; width: 240px; height: 240px; }
+  .ring svg { transform: rotate(-90deg); width:100%; height:100%; }
+  .ring .track { fill:none; stroke: var(--ring-track); stroke-width: 14; }
+  .ring .prog { fill:none; stroke: url(#grad); stroke-width: 14; stroke-linecap: round; transition: stroke-dashoffset .3s linear; }
+  .ring .label { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .ring .time { font-size: 3.2rem; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing:-.02em; }
+  .ring .state { color: var(--muted); font-size:.85rem; margin-top:2px; font-weight:600; }
+  .ring.warn .prog { stroke: var(--warn); }
+
+  .reps-box { display:grid; place-items:center; margin: 6px 0 18px; }
+  .reps-num { font-size: 4.8rem; font-weight: 800; line-height:1; font-variant-numeric: tabular-nums; letter-spacing:-.03em; }
+  .reps-of { color: var(--muted); margin-top: 5px; font-size:.95rem; font-weight:600; }
+  .rep-controls { display:flex; gap:16px; margin-top:20px; }
+  .rep-btn { width:66px; height:66px; border-radius:50%; font-size:1.9rem; font-weight:700; cursor:pointer;
+    background: var(--surface-2); border:1px solid var(--border); color:var(--text); transition: transform .14s var(--ease); }
+  .rep-btn:active { transform: scale(.9); }
+  .rep-btn.plus { background: linear-gradient(135deg, var(--brand), var(--brand-2)); color:var(--brand-ink); border:none; box-shadow: var(--shadow-brand); }
+
+  /* Demo media */
+  .media-frame { position:relative; width:100%; aspect-ratio:16/10; background:var(--surface-2);
+    border:1px solid var(--border); border-radius:var(--r-md); overflow:hidden; margin-bottom:10px; display:grid; place-items:center; }
+  .media-frame video, .media-frame .demo-gif { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .media-fallback { text-align:center; padding:18px; color:var(--muted); }
+  .media-fallback .mf-ic { font-size:2.6rem; opacity:.7; }
+  .media-fallback .mf-txt { font-size:.8rem; margin-top:8px; line-height:1.5; }
+  .media-fallback code { background:var(--surface-3); padding:1px 6px; border-radius:5px; color:var(--brand); font-size:.78rem; }
+  .demo-link { display:flex; align-items:center; justify-content:center; gap:6px; text-decoration:none; margin-bottom:14px; }
+
+  .info-list { background: var(--surface); border:1px solid var(--border); border-radius:var(--r-md); padding: 14px 16px; margin-bottom: 14px; box-shadow:var(--shadow-sm); }
+  .info-list h4 { margin:0 0 9px; font-size:.74rem; text-transform:uppercase; letter-spacing:.9px; color: var(--brand); font-weight:800; }
+  .info-list ul { margin:0; padding-left: 18px; }
+  .info-list li { margin: 5px 0; font-size:.92rem; color: var(--text); }
+
+  .p-controls { padding: 12px 22px calc(16px + env(safe-area-inset-bottom)); border-top:1px solid var(--border);
+    background: color-mix(in srgb, var(--bg) 78%, transparent); backdrop-filter: blur(10px); display:flex; gap:10px; }
+  .p-controls .btn { flex:1; }
+
+  /* Rest screen */
+  .rest-screen { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding: 22px; }
+  .rest-screen .lbl { color: var(--brand); font-weight:800; letter-spacing:2.5px; text-transform:uppercase; font-size:.8rem; }
+  .rest-screen .big { font-size: 6rem; font-weight:800; font-variant-numeric: tabular-nums; line-height:1; margin:10px 0; letter-spacing:-.03em; }
+  .rest-screen .next { color: var(--muted); font-size:1rem; }
+  .rest-screen .next b { color: var(--text); font-size:1.3rem; display:block; margin-top:5px; font-weight:800; }
+  .rest-actions { display:flex; gap:10px; margin-top:30px; width:100%; max-width:360px; }
+  .rest-actions .btn { flex:1; }
+
+  /* Complete screen */
+  .done-screen { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding: 30px 24px; }
+  .done-screen .burst { font-size: 5rem; animation: pop .6s var(--ease); }
+  @keyframes pop { 0%{transform:scale(.3);opacity:0} 60%{transform:scale(1.18)} 100%{transform:scale(1)} }
+  .done-screen h2 { font-size:1.9rem; margin: 12px 0 6px; font-weight:800; letter-spacing:-.02em; }
+  .done-screen p { color: var(--muted); margin: 0 0 4px; }
+  .done-stats { display:flex; gap:14px; margin: 24px 0; }
+  .done-stats .s { background:var(--surface); border:1px solid var(--border); border-radius:var(--r-md); padding:16px 20px; box-shadow:var(--shadow-sm); }
+  .done-stats .s b { font-size:1.9rem; display:block; font-weight:800; }
+  .done-stats .s span { font-size:.72rem; color:var(--muted); font-weight:600; }
+
+  /* ---------- Settings sheet ---------- */
+  .modal { position:fixed; inset:0; z-index:80; display:none; align-items:flex-end; justify-content:center;
+    background: rgba(3,7,18,.55); backdrop-filter: blur(5px); }
+  .modal.open { display:flex; animation: fade .22s var(--ease); }
+  .sheet { background: var(--surface); border:1px solid var(--border); border-radius: var(--r-xl) var(--r-xl) 0 0;
+    width:100%; max-width:640px; padding: 8px 20px calc(22px + env(safe-area-inset-bottom)); max-height: 90vh; overflow-y:auto;
+    box-shadow: var(--shadow-lg); animation: sheetUp .3s var(--ease); }
+  @keyframes sheetUp { from{transform:translateY(40px)} to{transform:none} }
+  .sheet-grip { width:40px; height:4px; border-radius:999px; background:var(--border); margin:8px auto 14px; }
+  .sheet h2 { margin: 0 0 8px; font-size:1.15rem; font-weight:800; letter-spacing:-.02em; }
+  .opt { display:flex; align-items:center; justify-content:space-between; gap:14px; padding: 15px 0; border-bottom:1px solid var(--border-soft); }
+  .opt:last-of-type { border-bottom:none; }
+  .opt .l { font-weight:600; font-size:.95rem; }
+  .opt .l small { display:block; color:var(--muted); font-weight:400; font-size:.78rem; margin-top:3px; line-height:1.4; }
+  .switch { position:relative; width:50px; height:30px; flex:0 0 auto; }
+  .switch input { display:none; }
+  .switch .slider { position:absolute; inset:0; background:var(--surface-3); border:1px solid var(--border); border-radius:999px; transition:.22s var(--ease); }
+  .switch .slider:before { content:""; position:absolute; width:22px; height:22px; left:3px; top:3px; background:var(--muted); border-radius:50%; transition:.22s var(--ease); }
+  .switch input:checked + .slider { background: linear-gradient(135deg, var(--brand), var(--brand-2)); border-color:transparent; }
+  .switch input:checked + .slider:before { transform: translateX(20px); background:var(--brand-ink); }
+  .stepper { display:flex; align-items:center; gap:12px; }
+  .stepper button { width:36px; height:36px; border-radius:11px; border:1px solid var(--border); background:var(--surface-2); color:var(--text); font-size:1.2rem; cursor:pointer; transition: transform .14s var(--ease); }
+  .stepper button:active { transform: scale(.9); }
+  .stepper b { min-width:46px; text-align:center; font-variant-numeric:tabular-nums; font-weight:700; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="topbar">
+    <div class="brand"><span class="logo">🌅</span><span>Morning Mobility</span></div>
+    <div class="topbar-actions">
+      <button class="icon-btn" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">🌙</button>
+      <button class="icon-btn" id="openSettings" title="Settings" aria-label="Settings">⚙️</button>
+    </div>
+  </header>
+
+  <div class="install-banner" id="installBanner" hidden>
+    <div class="ib-txt">📲 Install Morning Mobility<small>Add to your home screen for an app-like experience</small></div>
+    <div class="ib-act">
+      <button class="ib-install" id="installBtn">Install</button>
+      <button class="ib-x" id="installDismiss" aria-label="Dismiss">✕</button>
+    </div>
+  </div>
+
+  <!-- ROUTINE TAB -->
+  <section id="tab-routine" class="active">
+    <div class="hero">
+      <div class="hero-head">
+        <div class="hero-greet"><span id="greeting">Good morning</span><small id="dateLabel">—</small></div>
+        <div class="chip-streak">🔥<b id="streakNum">0</b><small>days</small></div>
+      </div>
+      <div class="hero-main">
+        <div class="ring-mini">
+          <svg viewBox="0 0 120 120">
+            <circle class="rm-track" cx="60" cy="60" r="52"></circle>
+            <circle class="rm-prog" id="heroRing" cx="60" cy="60" r="52" stroke-dasharray="326.7" stroke-dashoffset="326.7"></circle>
+          </svg>
+          <div class="rm-center"><b id="heroPct">0%</b><small>today</small></div>
+        </div>
+        <div class="hero-info">
+          <div class="hero-count"><b id="dpDone">0</b> / <span id="dpTotal">21</span></div>
+          <div class="hero-sub">exercises done today</div>
+          <div class="hero-actions">
+            <button class="btn" id="startBtn">▶ Start</button>
+            <button class="btn ghost" id="resumeBtn">↻ Resume</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="hint" id="routineHint">Tap any exercise to jump to it, or start the guided routine to flow through everything with timers, rest breaks, and voice cues.</p>
+    <div id="exerciseList"></div>
+    <span class="reset-link" id="resetToday">Reset today's progress</span>
+  </section>
+
+  <!-- CHECKLIST TAB -->
+  <section id="tab-checklist">
+    <h2 class="sec-title">✅ Daily Checklist</h2>
+    <div id="checklist"></div>
+  </section>
+
+  <!-- PROGRESS TAB -->
+  <section id="tab-progress">
+    <h2 class="sec-title">📈 Your Progress</h2>
+    <div class="stat-grid">
+      <div class="stat"><b id="stStreak">0</b><span>Current streak</span></div>
+      <div class="stat"><b id="stBest">0</b><span>Best streak</span></div>
+      <div class="stat"><b id="stTotal">0</b><span>Days done</span></div>
+    </div>
+    <div class="cal-card">
+      <h3 class="sec-title" style="font-size:.95rem; margin:0 0 12px">Last 28 days</h3>
+      <div class="cal" id="calendar"></div>
+    </div>
+    <p class="hint">A full square = whole routine completed that day. A faded square = partial.</p>
+  </section>
+
+  <!-- PLAN TAB -->
+  <section id="tab-plan">
+    <h2 class="sec-title">🗓️ Weekly Progression</h2>
+    <div id="weekPlan"></div>
+    <h2 class="sec-title" style="margin-top:22px">🎯 This Routine Targets</h2>
+    <div class="week-card">
+      <ul>
+        <li>Neck stiffness & shoulder blade pain</li>
+        <li>Arm heaviness & thoracic tightness</li>
+        <li>Poor posture</li>
+        <li>Ankle mobility restriction</li>
+        <li>Pelvic floor relaxation</li>
+        <li>General body stiffness</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="tabs">
+  <button data-tab="routine" class="active"><span class="ic">🏃</span>Routine</button>
+  <button data-tab="checklist"><span class="ic">✅</span>Checklist</button>
+  <button data-tab="progress"><span class="ic">📈</span>Progress</button>
+  <button data-tab="plan"><span class="ic">🗓️</span>Plan</button>
+</nav>
+
+<!-- GUIDED PLAYER -->
+<div class="player" id="player">
+  <div class="p-top">
+    <button class="x" id="pClose">✕</button>
+    <div class="count"><span id="pIndex">1</span> / <span id="pCount">21</span></div>
+    <button class="x" id="pSkip" title="Skip">⏭</button>
+  </div>
+  <div class="p-progress"><i id="pProgBar"></i></div>
+  <div class="p-body" id="pBody"></div>
+  <div class="p-controls" id="pControls">
+    <button class="btn secondary" id="pPrev">‹ Prev</button>
+    <button class="btn" id="pNext">Done ›</button>
+  </div>
+</div>
+
+<!-- SETTINGS SHEET -->
+<div class="modal" id="settingsModal">
+  <div class="sheet">
+    <div class="sheet-grip"></div>
+    <h2>⚙️ Settings</h2>
+    <div class="opt">
+      <div class="l">🎨 Light theme<small>Switch between dark and light mode</small></div>
+      <label class="switch"><input type="checkbox" id="setLight"><span class="slider"></span></label>
+    </div>
+    <div class="opt">
+      <div class="l">🔊 Sound cues<small>Beeps when timers finish & count down</small></div>
+      <label class="switch"><input type="checkbox" id="setSound"><span class="slider"></span></label>
+    </div>
+    <div class="opt">
+      <div class="l">🗣️ Voice coaching<small>Speaks exercise names & side switches</small></div>
+      <label class="switch"><input type="checkbox" id="setVoice"><span class="slider"></span></label>
+    </div>
+    <div class="opt">
+      <div class="l">⏩ Auto-advance<small>Move to next exercise automatically after rest</small></div>
+      <label class="switch"><input type="checkbox" id="setAuto"><span class="slider"></span></label>
+    </div>
+    <div class="opt">
+      <div class="l">😴 Keep screen awake<small>Prevent screen from sleeping during workout</small></div>
+      <label class="switch"><input type="checkbox" id="setWake"><span class="slider"></span></label>
+    </div>
+    <div class="opt">
+      <div class="l">🧘 Essentials only<small>Skip the optional warm-towel step</small></div>
+      <label class="switch"><input type="checkbox" id="setEssential"><span class="slider"></span></label>
+    </div>
+    <div class="opt">
+      <div class="l">⏱️ Rest between exercises</div>
+      <div class="stepper">
+        <button id="restMinus">−</button><b><span id="restVal">15</span>s</b><button id="restPlus">+</button>
+      </div>
+    </div>
+    <button class="btn" id="closeSettings" style="margin-top:18px;">Done</button>
+  </div>
+</div>
+
+<svg width="0" height="0"><defs>
+  <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%" stop-color="#5eead4"/>
+    <stop offset="100%" stop-color="#818cf8"/>
+  </linearGradient>
+</defs></svg>
+
+<script>
+/* ---------------- DATA: full routine ---------------- */
+const EXERCISES = [
+  { id:'belly', phase:'Phase 1 · Relaxation', name:'Belly Breathing', icon:'🫁',
+    type:'timed', duration:300, prescr:'5 minutes',
+    steps:['Lie on your back','One hand on chest, one on stomach','Inhale 4 seconds','Exhale 6–8 seconds'],
+    focus:['Relax pelvic floor','Reduce tension','Relax neck & shoulders'] },
+  { id:'towel', phase:'Phase 1 · Relaxation', name:'Warm Towel (Optional)', icon:'🧖',
+    type:'timed', duration:600, prescr:'10 minutes · optional', optional:true,
+    steps:['Apply warm towel to buttocks','Apply to pelvic / perineal area'],
+    focus:['Relaxation','Increase blood flow'] },
+
+  { id:'chintuck', phase:'Phase 2 · Neck & Spine', name:'Chin Tucks', icon:'🙆',
+    type:'reps', reps:10, sets:1, holdSec:5, prescr:'10 reps · hold 5 sec',
+    steps:['Gently draw chin straight back ("double chin")','Hold 5 seconds','Keep eyes level'],
+    focus:['Neck alignment','Reduce forward head posture'] },
+  { id:'catcow', phase:'Phase 2 · Neck & Spine', name:'Cat-Cow', icon:'🐈',
+    type:'reps', reps:10, sets:1, prescr:'10 slow reps',
+    steps:['On hands & knees','Arch back & look up (cow)','Round back & tuck chin (cat)','Move slowly with breath'],
+    focus:['Spine mobility','Release tension'] },
+  { id:'thread', phase:'Phase 2 · Neck & Spine', name:'Thread the Needle', icon:'🧵',
+    type:'timed', duration:25, sides:true, rounds:2, prescr:'2 rounds · 20–30 sec each side',
+    steps:['From hands & knees, slide one arm under the other','Rest shoulder & ear on floor','Feel the stretch through upper back'],
+    focus:['Thoracic rotation','Shoulder blade release'] },
+
+  { id:'child', phase:'Phase 3 · Upper Back', name:"Child's Pose", icon:'🧎',
+    type:'timed', duration:60, prescr:'1 minute',
+    steps:['Kneel and sit back on heels','Reach arms forward','Relax chest toward floor'],
+    focus:['Lengthen spine','Relax shoulders'] },
+  { id:'childside', phase:'Phase 3 · Upper Back', name:"Child's Pose Side Reach", icon:'🤸',
+    type:'timed', duration:25, sides:true, rounds:2, prescr:'2 rounds · 20–30 sec each side',
+    steps:["From child's pose, walk both hands to one side","Feel stretch along the side body","Keep hips back toward heels"],
+    focus:['Lateral (side) stretch','Lat & shoulder release'] },
+  { id:'happybaby', phase:'Phase 3 · Upper Back', name:'Happy Baby Pose', icon:'👶',
+    type:'timed', duration:45, rounds:2, prescr:'2 rounds · 30–60 sec hold',
+    steps:['Lie on back','Bend knees toward chest','Hold outside of feet','Gently rock side to side'],
+    focus:['Hip & lower back release','Pelvic floor relaxation'] },
+  { id:'doorway', phase:'Phase 3 · Upper Back', name:'Doorway Chest Stretch', icon:'🚪',
+    type:'timed', duration:30, rounds:2, prescr:'2 rounds · 30 sec hold',
+    steps:['Place forearms on a doorframe','Step one foot through','Lean gently forward'],
+    focus:['Open chest','Counter rounded shoulders'] },
+  { id:'thoracicext', phase:'Phase 3 · Upper Back', name:'Thoracic Extension on Chair', icon:'🪑',
+    type:'reps', reps:10, sets:1, prescr:'10 reps',
+    steps:['Sit on a chair','Place hands behind head','Gently arch upper back over chair top','Return slowly'],
+    focus:['Reverse hunching','Mid-back mobility'] },
+
+  { id:'wallslide', phase:'Phase 4 · Scapular Control', name:'Wall Slides', icon:'🧱',
+    type:'reps', reps:5, sets:2, prescr:'5 reps × 2 sets',
+    steps:['Back against wall','Arms in "goal post" against wall','Slide arms up & down slowly'],
+    focus:['No shrugging','No lower back arch'] },
+  { id:'scapretract', phase:'Phase 4 · Scapular Control', name:'Scapular Retraction', icon:'🎯',
+    type:'reps', reps:10, sets:1, holdSec:5, prescr:'10 reps · hold 5 sec',
+    steps:['Pull shoulder blades back','...and gently down','Hold 5 seconds, release'],
+    focus:['Activate mid-back','Improve posture'] },
+
+  { id:'deadhang', phase:'Phase 5 · Hanging', name:'Dead Hang', icon:'🧗',
+    type:'timed', duration:15, rounds:3, prescr:'3 rounds · 10–20 sec',
+    steps:['Hang from a bar','Use feet support if needed','Relax shoulders & breathe'],
+    focus:['Shoulder decompression','Spine decompression','Grip strength'] },
+  { id:'scappullup', phase:'Phase 5 · Hanging', name:'Scapular Pull-Ups', icon:'💪',
+    type:'reps', reps:6, sets:1, prescr:'5–8 reps',
+    steps:['Hang from bar','Pull shoulder blades down (small movement)','Do NOT bend elbows'],
+    focus:['Scapular strength','Pull-up preparation'] },
+
+  { id:'incline', phase:'Phase 6 · Push-Up', name:'Incline Push-Ups', icon:'🛏️',
+    type:'reps', reps:9, sets:2, prescr:'8–10 reps × 2 sets',
+    steps:['Hands on table / bench / bed edge','Lower with control','At top: push slightly extra (serratus)'],
+    focus:['Neck neutral','Core tight'] },
+
+  { id:'calfstraight', phase:'Phase 7 · Lower Body', name:'Straight Knee Calf Stretch', icon:'🦵',
+    type:'timed', duration:45, sides:true, prescr:'45 sec each side',
+    steps:['Hands on wall','Back leg straight, heel down','Lean forward'],
+    focus:['Upper calf (gastrocnemius)'] },
+  { id:'calfbent', phase:'Phase 7 · Lower Body', name:'Bent Knee Calf Stretch', icon:'🦿',
+    type:'timed', duration:45, sides:true, prescr:'45 sec each side',
+    steps:['Same position as before','Bend the back knee slightly','Keep heel down'],
+    focus:['Lower calf (soleus)'] },
+  { id:'kneewall', phase:'Phase 7 · Lower Body', name:'Knee-to-Wall Ankle Drill', icon:'📏',
+    type:'reps', reps:10, sets:1, sides:true, prescr:'10 reps each side',
+    steps:['Foot a few inches from wall','Drive knee toward wall over toes','Keep heel down'],
+    focus:['Ankle dorsiflexion mobility'] },
+  { id:'squat', phase:'Phase 7 · Lower Body', name:'Supported Deep Squat Hold', icon:'🧘',
+    type:'timed', duration:25, rounds:2, prescr:'2 rounds · 20–30 sec hold',
+    steps:['Hold a support if needed','Sink into a deep squat','Keep heels down, chest up'],
+    focus:['Hip & ankle mobility'] },
+
+  { id:'mountain', phase:'Phase 8 · Posture Reset', name:'Mountain Pose', icon:'⛰️',
+    type:'timed', duration:60, prescr:'1 minute',
+    steps:['Stand tall','Chin neutral, chest open','Shoulders relaxed','Slow breathing'],
+    focus:['Reset posture','Calm nervous system'] },
+
+  { id:'walk', phase:'Phase 9 · Walking', name:'Walk', icon:'🚶',
+    type:'timed', duration:1200, prescr:'20–30 minutes · comfortable pace',
+    steps:['Walk at a comfortable pace'],
+    focus:['Blood flow','Pelvic floor relaxation','Recovery','Reduced stiffness'] },
+];
+
+const WEEK_PLAN = [
+  { h:'Weeks 1–2 · Build the base', items:['Focus on mobility','Dead hangs','Scapular pull-ups','Incline push-ups'] },
+  { h:'Weeks 3–4 · Add load', items:['Increase dead hang to 30 sec','Increase incline push-ups','Start assisted pull-ups'] },
+  { h:'Weeks 5–8 · Strength', items:['Regular push-ups','Assisted / full pull-ups if pain-free'] },
+];
+
+/* ---------------- STORAGE ---------------- */
+const todayKey = () => new Date().toISOString().slice(0,10);
+const LS = {
+  get(k, def){ try { const v = localStorage.getItem(k); return v===null ? def : JSON.parse(v); } catch { return def; } },
+  set(k, v){ localStorage.setItem(k, JSON.stringify(v)); }
+};
+
+const defSettings = { sound:true, voice:true, autoAdvance:true, wake:true, essential:false, restSec:15, theme:null };
+let settings = Object.assign({}, defSettings, LS.get('settings', {}));
+function saveSettings(){ LS.set('settings', settings); }
+
+function activeList(){ return settings.essential ? EXERCISES.filter(e=>!e.optional) : EXERCISES; }
+
+function getDone(){ const all = LS.get('history', {}); return all[todayKey()] || []; }
+function setDone(arr){
+  const all = LS.get('history', {});
+  all[todayKey()] = arr; LS.set('history', all); updateStreak();
+}
+function toggleDone(id){
+  let d = getDone();
+  d = d.includes(id) ? d.filter(x=>x!==id) : [...d, id];
+  setDone(d); renderAll();
+}
+function markDone(id){ const d = getDone(); if(!d.includes(id)){ setDone([...d, id]); } }
+
+function updateStreak(){
+  const all = LS.get('history', {});
+  let cur = 0; let cursor = new Date();
+  const key = d => d.toISOString().slice(0,10);
+  if(!(all[key(cursor)]?.length)) cursor.setDate(cursor.getDate()-1);
+  while(all[key(cursor)]?.length){ cur++; cursor.setDate(cursor.getDate()-1); }
+  let best = LS.get('bestStreak',0);
+  if(cur>best){ best=cur; LS.set('bestStreak',best); }
+  LS.set('curStreak', cur);
+}
+
+/* ---------------- THEME ---------------- */
+function systemTheme(){ return window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light':'dark'; }
+function currentTheme(){ return settings.theme || systemTheme(); }
+function applyTheme(){
+  const t = currentTheme();
+  document.documentElement.dataset.theme = t;
+  const tt = document.getElementById('themeToggle');
+  if(tt) tt.textContent = t==='light' ? '☀️' : '🌙';
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if(meta) meta.setAttribute('content', t==='light' ? '#eef1f8' : '#0a0f1d');
+  const lc = document.getElementById('setLight'); if(lc) lc.checked = t==='light';
+}
+document.getElementById('themeToggle').addEventListener('click', ()=>{
+  settings.theme = currentTheme()==='light' ? 'dark' : 'light'; saveSettings(); applyTheme();
+});
+
+/* ---------------- RENDER: routine list ---------------- */
+const elList = document.getElementById('exerciseList');
+function renderList(){
+  const done = getDone();
+  let html=''; let curPhase='';
+  EXERCISES.forEach((ex,i)=>{
+    if(ex.phase!==curPhase){
+      if(curPhase) html+='</div>';
+      curPhase=ex.phase;
+      const [num, ...rest] = ex.phase.split(' · ');
+      html+=`<div class="phase"><div class="phase-h"><span class="num">${num}</span><h3>${rest.join(' · ')}</h3></div>`;
+    }
+    const isDone = done.includes(ex.id);
+    const dim = settings.essential && ex.optional ? 'dim' : '';
+    html+=`<div class="ex-card ${isDone?'done':''} ${dim}" data-open="${ex.id}">
+      <div class="ex-ic">${ex.icon}</div>
+      <div class="ex-meta"><div class="nm">${ex.name}${ex.optional?'<span class="tag">optional</span>':''}</div><div class="sub">${ex.prescr}</div></div>
+      <div class="ex-check">✓</div>
+    </div>`;
+  });
+  html+='</div>';
+  elList.innerHTML=html;
+  elList.querySelectorAll('[data-open]').forEach(c=>{
+    c.addEventListener('click', ()=> openSingle(c.dataset.open));
+  });
+}
+
+/* ---------------- RENDER: progress + stats ---------------- */
+const HERO_C = 2*Math.PI*52;
+function renderProgress(){
+  const list = activeList();
+  const doneIds = getDone();
+  const done = list.filter(e=>doneIds.includes(e.id)).length;
+  const total = list.length;
+  const pct = Math.round(done/total*100);
+  document.getElementById('dpDone').textContent = done;
+  document.getElementById('dpTotal').textContent = total;
+  document.getElementById('heroPct').textContent = pct+'%';
+  const ring = document.getElementById('heroRing');
+  if(ring){ ring.setAttribute('stroke-dasharray', HERO_C); ring.setAttribute('stroke-dashoffset', HERO_C*(1-pct/100)); }
+
+  document.getElementById('streakNum').textContent = LS.get('curStreak',0);
+  document.getElementById('stStreak').textContent = LS.get('curStreak',0);
+  document.getElementById('stBest').textContent = LS.get('bestStreak',0);
+  const all = LS.get('history',{});
+  document.getElementById('stTotal').textContent = Object.values(all).filter(a=>a.length>0).length;
+
+  const cal = document.getElementById('calendar');
+  let c = ['S','M','T','W','T','F','S'].map(d=>`<div class="dow">${d}</div>`).join('');
+  // pad so first column aligns to weekday of the earliest shown day
+  const first = new Date(); first.setDate(first.getDate()-27);
+  for(let p=0;p<first.getDay();p++) c+='<div></div>';
+  for(let i=27;i>=0;i--){
+    const d = new Date(); d.setDate(d.getDate()-i);
+    const k = d.toISOString().slice(0,10);
+    const cnt = (all[k]||[]).length;
+    const cls = cnt>=total ? 'full' : cnt>0 ? 'part':'';
+    const today = i===0 ? 'today':'';
+    c+=`<div class="d ${cls} ${today}" title="${k}: ${cnt} done">${d.getDate()}</div>`;
+  }
+  cal.innerHTML=c;
+}
+
+/* ---------------- RENDER: checklist ---------------- */
+function renderChecklist(){
+  const done = getDone();
+  const el = document.getElementById('checklist');
+  el.innerHTML = EXERCISES.map(ex=>{
+    const d = done.includes(ex.id);
+    return `<div class="check-item ${d?'done':''}" data-toggle="${ex.id}">
+      <div class="box">✓</div><div class="nm">${ex.icon} ${ex.name}</div></div>`;
+  }).join('');
+  el.querySelectorAll('[data-toggle]').forEach(it=>{
+    it.addEventListener('click', ()=> toggleDone(it.dataset.toggle));
+  });
+}
+
+document.getElementById('weekPlan').innerHTML = WEEK_PLAN.map(w=>
+  `<div class="week-card"><h3>${w.h}</h3><ul>${w.items.map(i=>`<li>${i}</li>`).join('')}</ul></div>`
+).join('');
+
+function renderAll(){ renderList(); renderProgress(); renderChecklist(); }
+
+/* ---------------- TABS ---------------- */
+document.querySelectorAll('nav.tabs button').forEach(b=>{
+  b.addEventListener('click', ()=>{
+    document.querySelectorAll('nav.tabs button').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+    b.classList.add('active');
+    document.getElementById('tab-'+b.dataset.tab).classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+function goTab(name){ document.querySelector(`nav.tabs button[data-tab="${name}"]`).click(); }
+
+/* ---------------- AUDIO + VOICE + WAKE LOCK ---------------- */
+let audioCtx = null;
+function beep(freq=880, dur=.35, vol=.3){
+  if(!settings.sound) return;
+  try{
+    audioCtx = audioCtx || new (window.AudioContext||window.webkitAudioContext)();
+    const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    o.frequency.value=freq; o.type='sine';
+    g.gain.setValueAtTime(.0001,audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(vol,audioCtx.currentTime+.02);
+    g.gain.exponentialRampToValueAtTime(.0001,audioCtx.currentTime+dur);
+    o.start(); o.stop(audioCtx.currentTime+dur);
+  }catch(e){}
+}
+function vibrate(ms){ try{ if(navigator.vibrate) navigator.vibrate(ms); }catch(e){} }
+function say(text){
+  if(!settings.voice) return;
+  try{
+    if(!('speechSynthesis' in window)) return;
+    const u=new SpeechSynthesisUtterance(text); u.rate=1; u.pitch=1;
+    speechSynthesis.cancel(); speechSynthesis.speak(u);
+  }catch(e){}
+}
+
+let wakeLock=null;
+async function requestWake(){
+  if(!settings.wake) return;
+  try{ if('wakeLock' in navigator){ wakeLock = await navigator.wakeLock.request('screen'); } }catch(e){}
+}
+function releaseWake(){ try{ if(wakeLock){ wakeLock.release(); wakeLock=null; } }catch(e){} }
+document.addEventListener('visibilitychange', ()=>{
+  if(document.visibilityState==='visible' && player.classList.contains('open')) requestWake();
+});
+
+/* ---------------- PLAYER ---------------- */
+const player = document.getElementById('player');
+const pBody = document.getElementById('pBody');
+const pControls = document.getElementById('pControls');
+let flow = EXERCISES;
+let pIdx = 0;
+let phase = 0;
+let timer = null;
+let remaining = 0;
+let running = false;
+let mode = 'exercise';
+let guided = false;
+let restTimer = null;
+
+function segments(ex){
+  if(ex.type!=='timed') return [{label:'', dur:0}];
+  const segs=[]; const rounds = ex.rounds||1;
+  if(ex.sides){
+    for(let r=0;r<rounds;r++){ segs.push({label:'Left side', dur:ex.duration}); segs.push({label:'Right side', dur:ex.duration}); }
+  } else {
+    for(let r=0;r<rounds;r++) segs.push({label: rounds>1?`Round ${r+1}`:'', dur:ex.duration});
+  }
+  return segs;
+}
+
+function openGuided(){ flow = activeList(); guided = true; pIdx = 0; openCommon(); }
+function resumeGuided(){
+  flow = activeList(); guided = true;
+  const doneIds = getDone();
+  let idx = flow.findIndex(e=>!doneIds.includes(e.id));
+  pIdx = idx<0 ? 0 : idx;
+  openCommon();
+}
+function openSingle(id){ flow = EXERCISES; guided = false; pIdx = EXERCISES.findIndex(e=>e.id===id); openCommon(); }
+function openCommon(){
+  phase = 0; remaining = 0; mode='exercise';
+  player.classList.add('open');
+  requestWake();
+  renderPlayer();
+}
+function closePlayer(){
+  stopTimer(); if(restTimer) clearInterval(restTimer);
+  try{ speechSynthesis.cancel(); }catch(e){}
+  releaseWake();
+  player.classList.remove('open');
+  renderAll();
+}
+function fmt(s){ const m=Math.floor(s/60), x=s%60; return (m>0? m+':'+String(x).padStart(2,'0') : String(x)); }
+
+function renderPlayer(){
+  mode='exercise';
+  pControls.style.display='flex';
+  const ex = flow[pIdx];
+  document.getElementById('pCount').textContent = flow.length;
+  document.getElementById('pIndex').textContent = pIdx+1;
+  document.getElementById('pProgBar').style.width = ((pIdx)/flow.length*100)+'%';
+  let body = `<div class="p-phase">${ex.phase}</div>
+    <div class="p-name">${ex.icon} ${ex.name}</div>
+    <div class="p-prescr">${ex.prescr}</div>`;
+
+  if(ex.type==='timed'){
+    const segs = segments(ex); const seg = segs[phase];
+    if(seg.label) body+=`<div class="p-side-badge">${seg.label} · segment ${phase+1}/${segs.length}</div>`;
+    remaining = remaining>0 ? remaining : seg.dur;
+    body+=ringHTML(remaining, seg.dur);
+  } else {
+    const totalSets = ex.sets||1;
+    const sideTxt = ex.sides ? ' (each side)' : '';
+    body+=`<div class="reps-box">
+      <div class="reps-num" id="repNum">0</div>
+      <div class="reps-of">of ${ex.reps} reps${sideTxt}${totalSets>1?` · set <span id="setNum">1</span>/${totalSets}`:''}</div>
+      ${ex.holdSec?`<div class="reps-of">hold each ${ex.holdSec}s</div>`:''}
+      <div class="rep-controls">
+        <button class="rep-btn" id="repMinus">−</button>
+        <button class="rep-btn plus" id="repPlus">+1</button>
+      </div></div>`;
+  }
+  body+=`<div id="pMedia"></div>`;
+  if(ex.steps) body+=`<div class="info-list"><h4>How to do it</h4><ul>${ex.steps.map(s=>`<li>${s}</li>`).join('')}</ul></div>`;
+  if(ex.focus) body+=`<div class="info-list"><h4>Focus / purpose</h4><ul>${ex.focus.map(s=>`<li>${s}</li>`).join('')}</ul></div>`;
+  pBody.innerHTML = body;
+  pBody.scrollTop = 0;
+
+  setupMedia(ex);
+  if(ex.type==='timed') wireTimer(); else wireReps(ex);
+
+  document.getElementById('pPrev').style.visibility = pIdx===0 ? 'hidden':'visible';
+  document.getElementById('pNext').textContent = pIdx===flow.length-1 ? 'Finish ✓' : 'Done ›';
+
+  if(ex.type==='reps') say(ex.name + (ex.sides?', each side':''));
+}
+
+/* Demo animation: plays media/<id>.mp4 or .gif if present, else shows a hint + YouTube search */
+function setupMedia(ex){
+  const box = document.getElementById('pMedia');
+  if(!box) return;
+  const yt = 'https://www.youtube.com/results?search_query=' + encodeURIComponent(ex.name + ' exercise how to');
+  box.innerHTML = `<div class="media-frame" id="mediaFrame">
+      <video id="demoVid" loop muted autoplay playsinline preload="auto" style="display:none"></video>
+      <div class="media-fallback" id="mediaFallback">
+        <div class="mf-ic">${ex.icon}</div>
+        <div class="mf-txt">No saved animation yet.<br>Add <code>media/${ex.id}.mp4</code> or <code>media/${ex.id}.gif</code> to show it here.</div>
+      </div>
+    </div>
+    <a class="btn secondary demo-link" href="${yt}" target="_blank" rel="noopener">▶ Watch a demo on YouTube</a>`;
+  const vid = document.getElementById('demoVid');
+  const frame = document.getElementById('mediaFrame');
+  const fb = document.getElementById('mediaFallback');
+  vid.addEventListener('loadeddata', ()=>{ vid.style.display='block'; if(fb) fb.style.display='none'; });
+  vid.addEventListener('error', ()=>{
+    const img = new Image();
+    img.className = 'demo-gif';
+    img.addEventListener('load', ()=>{ if(fb) fb.style.display='none'; frame.appendChild(img); });
+    img.src = 'media/' + ex.id + '.gif';
+  });
+  vid.src = 'media/' + ex.id + '.mp4';
+  vid.load();
+}
+
+function ringHTML(rem, total){
+  const R=100, C=2*Math.PI*R;
+  const off = C*(1- (total? rem/total : 0));
+  return `<div class="ring-wrap"><div class="ring" id="ring">
+    <svg viewBox="0 0 230 230">
+      <circle class="track" cx="115" cy="115" r="${R}"></circle>
+      <circle class="prog" id="ringProg" cx="115" cy="115" r="${R}"
+        stroke-dasharray="${C}" stroke-dashoffset="${off}"></circle>
+    </svg>
+    <div class="label"><div class="time" id="ringTime">${fmt(rem)}</div>
+      <div class="state" id="ringState">Tap to start</div></div>
+  </div></div>
+  <button class="btn" id="timerBtn" style="max-width:320px;margin:0 auto;">▶ Start</button>`;
+}
+function setRing(rem,total){
+  const R=100, C=2*Math.PI*R;
+  const p=document.getElementById('ringProg');
+  if(p) p.setAttribute('stroke-dashoffset', C*(1-(total?rem/total:0)));
+  const t=document.getElementById('ringTime'); if(t) t.textContent=fmt(rem);
+  const ring=document.getElementById('ring');
+  if(ring) ring.classList.toggle('warn', rem<=3 && rem>0);
+}
+function wireTimer(){
+  const btn=document.getElementById('timerBtn');
+  btn.addEventListener('click', ()=> running ? pauseTimer() : startTimer());
+}
+function startTimer(){
+  const ex=flow[pIdx]; const segs=segments(ex); const seg=segs[phase];
+  if(remaining<=0) remaining=seg.dur;
+  running=true;
+  const btn=document.getElementById('timerBtn'); if(btn) btn.textContent='⏸ Pause';
+  const st=document.getElementById('ringState'); if(st) st.textContent='In progress…';
+  if(seg.label) say(seg.label); else say(ex.name);
+  timer=setInterval(()=>{
+    remaining--;
+    setRing(remaining, seg.dur);
+    if(remaining<=3 && remaining>0) beep(660,.12,.2);
+    if(remaining<=0){
+      clearInterval(timer); running=false; beep(880,.4,.3); vibrate(250);
+      if(phase < segs.length-1){
+        phase++; remaining=0; renderPlayer();
+        setTimeout(()=>{ if(player.classList.contains('open') && mode==='exercise') startTimer(); }, 700);
+      } else {
+        const stt=document.getElementById('ringState'); if(stt) stt.textContent='Complete ✓';
+        const b=document.getElementById('timerBtn'); if(b) b.textContent='✓ Done';
+        markDone(ex.id); say('Done');
+        if(settings.autoAdvance) setTimeout(advance, 900);
+      }
+    }
+  },1000);
+}
+function pauseTimer(){
+  running=false; clearInterval(timer);
+  const btn=document.getElementById('timerBtn'); if(btn) btn.textContent='▶ Resume';
+  const st=document.getElementById('ringState'); if(st) st.textContent='Paused';
+}
+function stopTimer(){ running=false; if(timer) clearInterval(timer); remaining=0; phase=0; }
+
+function wireReps(ex){
+  let count=0, set=1;
+  const numEl=document.getElementById('repNum');
+  const setEl=document.getElementById('setNum');
+  document.getElementById('repPlus').addEventListener('click', ()=>{
+    count++; beep(700,.08,.15); vibrate(30);
+    if(count>=ex.reps){
+      if((ex.sets||1)>set){ set++; count=0; if(setEl) setEl.textContent=set; beep(880,.25,.25); say('Next set'); }
+      else { count=ex.reps; markDone(ex.id); beep(880,.4,.3); vibrate(250); numEl.style.color='var(--good)'; say('Done');
+        if(settings.autoAdvance) setTimeout(advance, 900); }
+    }
+    numEl.textContent=count;
+  });
+  document.getElementById('repMinus').addEventListener('click', ()=>{
+    if(count>0){ count--; numEl.textContent=count; numEl.style.color=''; }
+  });
+}
+
+function advance(){
+  stopTimer();
+  if(pIdx >= flow.length-1){ renderComplete(); return; }
+  if(guided && settings.restSec>0){ renderRest(); }
+  else { pIdx++; renderPlayer(); }
+}
+
+function renderRest(){
+  mode='rest';
+  if(timer) clearInterval(timer);
+  pControls.style.display='none';
+  document.getElementById('pProgBar').style.width = ((pIdx+1)/flow.length*100)+'%';
+  const next = flow[pIdx+1];
+  let rest = settings.restSec;
+  pBody.innerHTML = `<div class="rest-screen">
+    <div class="lbl">Rest</div>
+    <div class="big" id="restBig">${rest}</div>
+    <div class="next">Next up<b>${next.icon} ${next.name}</b><span style="font-size:.85rem">${next.prescr}</span></div>
+    <div class="rest-actions">
+      <button class="btn secondary" id="restAdd">+15s</button>
+      <button class="btn" id="restSkip">Skip ›</button>
+    </div></div>`;
+  say('Rest. Next, '+next.name);
+  const big=document.getElementById('restBig');
+  function finish(){ clearInterval(restTimer); restTimer=null; pIdx++; renderPlayer(); }
+  document.getElementById('restSkip').addEventListener('click', finish);
+  document.getElementById('restAdd').addEventListener('click', ()=>{ rest+=15; big.textContent=rest; });
+  restTimer=setInterval(()=>{
+    rest--; if(big) big.textContent=rest;
+    if(rest<=3 && rest>0) beep(660,.1,.18);
+    if(rest<=0){ beep(880,.3,.3); vibrate(150); finish(); }
+  },1000);
+}
+
+function renderComplete(){
+  mode='done';
+  if(timer) clearInterval(timer); if(restTimer) clearInterval(restTimer);
+  pControls.style.display='none';
+  document.getElementById('pProgBar').style.width = '100%';
+  const list = activeList(); const doneIds=getDone();
+  const done = list.filter(e=>doneIds.includes(e.id)).length;
+  beep(660,.15,.25); setTimeout(()=>beep(880,.15,.25),160); setTimeout(()=>beep(1100,.35,.3),320);
+  vibrate([120,80,120]); say('Great work! Routine complete.');
+  pBody.innerHTML = `<div class="done-screen">
+    <div class="burst">🎉</div>
+    <h2>Routine complete!</h2>
+    <p>Nice work taking care of your body today.</p>
+    <div class="done-stats">
+      <div class="s"><b>${done}/${list.length}</b><span>exercises</span></div>
+      <div class="s"><b>${LS.get('curStreak',0)}</b><span>day streak 🔥</span></div>
+    </div>
+    <button class="btn" id="doneHome" style="max-width:320px;">Back to home</button>
+  </div>`;
+  document.getElementById('doneHome').addEventListener('click', ()=>{ closePlayer(); goTab('progress'); });
+}
+
+/* player controls */
+document.getElementById('pClose').addEventListener('click', closePlayer);
+document.getElementById('pPrev').addEventListener('click', ()=>{ stopTimer(); if(pIdx>0){ pIdx--; renderPlayer(); } });
+document.getElementById('pNext').addEventListener('click', ()=>{ markDone(flow[pIdx].id); advance(); });
+document.getElementById('pSkip').addEventListener('click', ()=>{
+  stopTimer(); if(restTimer) clearInterval(restTimer);
+  if(pIdx<flow.length-1){ pIdx++; renderPlayer(); } else renderComplete();
+});
+document.getElementById('startBtn').addEventListener('click', openGuided);
+document.getElementById('resumeBtn').addEventListener('click', resumeGuided);
+document.getElementById('resetToday').addEventListener('click', ()=>{
+  if(confirm("Reset today's progress?")){ setDone([]); renderAll(); }
+});
+
+/* ---------------- SETTINGS UI ---------------- */
+const settingsModal=document.getElementById('settingsModal');
+function syncSettingsUI(){
+  document.getElementById('setLight').checked = currentTheme()==='light';
+  document.getElementById('setSound').checked=settings.sound;
+  document.getElementById('setVoice').checked=settings.voice;
+  document.getElementById('setAuto').checked=settings.autoAdvance;
+  document.getElementById('setWake').checked=settings.wake;
+  document.getElementById('setEssential').checked=settings.essential;
+  document.getElementById('restVal').textContent=settings.restSec;
+}
+document.getElementById('openSettings').addEventListener('click', ()=>{ syncSettingsUI(); settingsModal.classList.add('open'); });
+document.getElementById('closeSettings').addEventListener('click', ()=> settingsModal.classList.remove('open'));
+settingsModal.addEventListener('click', e=>{ if(e.target===settingsModal) settingsModal.classList.remove('open'); });
+function bindToggle(id, key, after){
+  document.getElementById(id).addEventListener('change', e=>{ settings[key]=e.target.checked; saveSettings(); if(after) after(); });
+}
+document.getElementById('setLight').addEventListener('change', e=>{ settings.theme = e.target.checked ? 'light':'dark'; saveSettings(); applyTheme(); });
+bindToggle('setSound','sound');
+bindToggle('setVoice','voice');
+bindToggle('setAuto','autoAdvance');
+bindToggle('setWake','wake', ()=>{ settings.wake ? requestWake() : releaseWake(); });
+bindToggle('setEssential','essential', renderAll);
+document.getElementById('restPlus').addEventListener('click', ()=>{ settings.restSec=Math.min(120,settings.restSec+5); document.getElementById('restVal').textContent=settings.restSec; saveSettings(); });
+document.getElementById('restMinus').addEventListener('click', ()=>{ settings.restSec=Math.max(0,settings.restSec-5); document.getElementById('restVal').textContent=settings.restSec; saveSettings(); });
+
+/* ---------------- INSTALL (PWA) ---------------- */
+let deferredPrompt = null;
+const installBanner = document.getElementById('installBanner');
+window.addEventListener('beforeinstallprompt', (e)=>{
+  e.preventDefault(); deferredPrompt = e;
+  if(!LS.get('installDismissed', false)) installBanner.hidden = false;
+});
+document.getElementById('installBtn').addEventListener('click', async ()=>{
+  if(!deferredPrompt) return;
+  deferredPrompt.prompt();
+  try{ await deferredPrompt.userChoice; }catch(e){}
+  deferredPrompt = null; installBanner.hidden = true;
+});
+document.getElementById('installDismiss').addEventListener('click', ()=>{
+  installBanner.hidden = true; LS.set('installDismissed', true);
+});
+window.addEventListener('appinstalled', ()=>{ installBanner.hidden = true; });
+
+/* register service worker (works over http/https, not file://) */
+if('serviceWorker' in navigator && location.protocol.startsWith('http')){
+  window.addEventListener('load', ()=>{ navigator.serviceWorker.register('sw.js').catch(()=>{}); });
+}
+
+/* ---------------- INIT ---------------- */
+const hr = new Date().getHours();
+document.getElementById('greeting').textContent = hr<12 ? 'Good morning' : hr<17 ? 'Good afternoon' : 'Good evening';
+document.getElementById('dateLabel').textContent =
+  new Date().toLocaleDateString(undefined,{weekday:'long', month:'short', day:'numeric'});
+
+applyTheme();
+if(window.matchMedia){
+  window.matchMedia('(prefers-color-scheme: light)').addEventListener?.('change', ()=>{ if(!settings.theme) applyTheme(); });
+}
+updateStreak();
+renderAll();
+</script>
+</body>
+</html>
