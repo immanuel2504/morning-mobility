@@ -80,14 +80,16 @@ offline mode need Option A or B** (a real web address), so Option A is recommend
 - **📲 Installable (PWA)** – when served over a web address, an "Install" banner appears so
   you can add it to your home screen and use it offline.
 
-## 🎬 Demo animations / videos
+## 🎬 Exercise images, animations & demos
 
-Each exercise screen has a **▶ Watch a demo on YouTube** button (opens a relevant how-to
-search in your browser).
-
-You can also show your **own looping animation right inside the app**: drop a video or GIF
-into the `media/` folder named after the exercise (e.g. `media/deadhang.mp4`), and it plays
-automatically on that exercise's screen. See `media/README.txt` for the full list of filenames.
+- **Built-in images** – every exercise already shows a clean photo of the movement, right
+  inside its screen. Nothing to set up; it works offline.
+- **▶ Watch a demo on YouTube** – each screen also has a button that opens a relevant
+  how-to search in your browser.
+- **Use your own image or clip** – drop a file into the `media/` folder named after the
+  exercise and it replaces the default. The app uses the first it finds in this order:
+  `<id>.jpg` → `<id>.png` → `<id>.mp4` (looping, muted video) → `<id>.gif`
+  (e.g. `media/deadhang.mp4`). See `media/README.txt` for the full list of filenames.
 
 ---
 

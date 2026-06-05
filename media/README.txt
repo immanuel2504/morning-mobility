@@ -1,48 +1,54 @@
-HOW TO ADD ANIMATION / DEMO VIDEOS
-==================================
+EXERCISE IMAGES / ANIMATIONS
+============================
 
-Put a video or GIF in THIS folder named exactly after the exercise.
-The app will automatically play it (looping, muted) inside that exercise screen.
+This folder already includes a clean photo for every exercise (the .jpg files),
+so each exercise screen shows its image immediately - nothing to set up.
 
-Accepted file types (the app tries them in this order):
-  1. <id>.mp4   (best - small, smooth, loops nicely)
-  2. <id>.gif   (also fine)
+Want to REPLACE an image or add a looping video? Drop a file in THIS folder named
+exactly after the exercise. The app picks the first one it finds, in this order:
+  1. <id>.jpg   (a still photo - this is what ships by default)
+  2. <id>.png
+  3. <id>.mp4   (a short looping, muted video - best for movement demos)
+  4. <id>.gif
 
-Example: to add a demo for "Dead Hang", save the file as:
-  media/deadhang.mp4
+Example: to swap the "Dead Hang" image, save your own file as:
+  media/deadhang.jpg     (or media/deadhang.mp4 for a looping clip)
 
-If no file is found, the screen shows a "Watch a demo on YouTube" button instead.
+If no file is found for an exercise, that screen shows a
+"Watch a demo on YouTube" button instead.
 
 ------------------------------------------------------------
 EXACT FILENAMES TO USE (one per exercise)
 ------------------------------------------------------------
-belly.mp4          -> Belly Breathing
-towel.mp4          -> Warm Towel (optional)
-chintuck.mp4       -> Chin Tucks
-catcow.mp4         -> Cat-Cow
-thread.mp4         -> Thread the Needle
-child.mp4          -> Child's Pose
-childside.mp4      -> Child's Pose Side Reach
-happybaby.mp4      -> Happy Baby Pose
-doorway.mp4        -> Doorway Chest Stretch
-thoracicext.mp4    -> Thoracic Extension on Chair
-wallslide.mp4      -> Wall Slides
-scapretract.mp4    -> Scapular Retraction
-deadhang.mp4       -> Dead Hang
-scappullup.mp4     -> Scapular Pull-Ups
-incline.mp4        -> Incline Push-Ups
-calfstraight.mp4   -> Straight Knee Calf Stretch
-calfbent.mp4       -> Bent Knee Calf Stretch
-kneewall.mp4       -> Knee-to-Wall Ankle Drill
-squat.mp4          -> Supported Deep Squat Hold
-mountain.mp4       -> Mountain Pose
-walk.mp4           -> Walk
+belly          -> Belly Breathing
+towel          -> Warm Towel (optional)
+chintuck       -> Chin Tucks
+catcow         -> Cat-Cow
+thread         -> Thread the Needle
+child          -> Child's Pose
+childside      -> Child's Pose Side Reach
+happybaby      -> Happy Baby Pose
+doorway        -> Doorway Chest Stretch
+thoracicext    -> Thoracic Extension on Chair
+wallslide      -> Wall Slides
+scapretract    -> Scapular Retraction
+deadhang       -> Dead Hang
+scappullup     -> Scapular Pull-Ups
+incline        -> Incline Push-Ups
+calfstraight   -> Straight Knee Calf Stretch
+calfbent       -> Bent Knee Calf Stretch
+kneewall       -> Knee-to-Wall Ankle Drill
+squat          -> Supported Deep Squat Hold
+mountain       -> Mountain Pose
+walk           -> Walk
 
-(You can use .gif instead of .mp4 for any of these.)
+(Add the extension you want: e.g. deadhang.jpg, deadhang.png, deadhang.mp4 or deadhang.gif.)
 
 ------------------------------------------------------------
-WHERE TO GET CLIPS
+WHERE TO GET CLIPS / IMAGES
 ------------------------------------------------------------
-- Record your own short clip (5-15 seconds is plenty) and trim it.
-- Or download a free exercise animation/GIF and rename it as above.
-- Keep files small (a few MB) so the app stays fast, especially on phone.
+- The included .jpg photos work out of the box - you don't need to do anything.
+- To customize: record your own short clip (5-15 seconds) or take a photo, then
+  rename it to match the exercise id above.
+- Keep files small (photos under ~300 KB, clips a few MB) so the app stays fast
+  on a phone.

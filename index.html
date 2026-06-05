@@ -271,7 +271,8 @@
   /* Demo media */
   .media-frame { position:relative; width:100%; aspect-ratio:16/10; background:var(--surface-2);
     border:1px solid var(--border); border-radius:var(--r-md); overflow:hidden; margin-bottom:10px; display:grid; place-items:center; }
-  .media-frame video, .media-frame .demo-gif { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .media-frame video, .media-frame .demo-gif, .media-frame .demo-img, .media-frame .demo-vid {
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
   .media-fallback { text-align:center; padding:18px; color:var(--muted); }
   .media-fallback .mf-ic { font-size:2.6rem; opacity:.7; }
   .media-fallback .mf-txt { font-size:.8rem; margin-top:8px; line-height:1.5; }
@@ -867,31 +868,42 @@ function renderPlayer(){
   if(ex.type==='reps') say(ex.name + (ex.sides?', each side':''));
 }
 
-/* Demo animation: plays media/<id>.mp4 or .gif if present, else shows a hint + YouTube search */
+/* Demo media: shows media/<id>.(png|jpg|webp) image if present, else .mp4/.gif, else a hint + YouTube search.
+   Static images display instantly; everything is optional and degrades gracefully. */
 function setupMedia(ex){
   const box = document.getElementById('pMedia');
   if(!box) return;
   const yt = 'https://www.youtube.com/results?search_query=' + encodeURIComponent(ex.name + ' exercise how to');
   box.innerHTML = `<div class="media-frame" id="mediaFrame">
-      <video id="demoVid" loop muted autoplay playsinline preload="auto" style="display:none"></video>
       <div class="media-fallback" id="mediaFallback">
         <div class="mf-ic">${ex.icon}</div>
-        <div class="mf-txt">No saved animation yet.<br>Add <code>media/${ex.id}.mp4</code> or <code>media/${ex.id}.gif</code> to show it here.</div>
+        <div class="mf-txt">No saved image yet.<br>Add <code>media/${ex.id}.jpg</code> (or .png / .mp4 / .gif) to show it here.</div>
       </div>
     </div>
     <a class="btn secondary demo-link" href="${yt}" target="_blank" rel="noopener">▶ Watch a demo on YouTube</a>`;
-  const vid = document.getElementById('demoVid');
   const frame = document.getElementById('mediaFrame');
   const fb = document.getElementById('mediaFallback');
-  vid.addEventListener('loadeddata', ()=>{ vid.style.display='block'; if(fb) fb.style.display='none'; });
-  vid.addEventListener('error', ()=>{
+  const base = 'media/' + ex.id;
+  const imgList = [base+'.jpg', base+'.png', base+'.jpeg', base+'.webp', base+'.gif'];
+  let i = 0;
+  function reveal(node){ if(fb) fb.style.display='none'; frame.insertBefore(node, frame.firstChild); }
+  function tryImg(){
+    if(i >= imgList.length){ tryVideo(); return; }
     const img = new Image();
-    img.className = 'demo-gif';
-    img.addEventListener('load', ()=>{ if(fb) fb.style.display='none'; frame.appendChild(img); });
-    img.src = 'media/' + ex.id + '.gif';
-  });
-  vid.src = 'media/' + ex.id + '.mp4';
-  vid.load();
+    img.className = 'demo-img';
+    img.onload = ()=> reveal(img);
+    img.onerror = ()=>{ i++; tryImg(); };
+    img.src = imgList[i];
+  }
+  function tryVideo(){
+    const vid = document.createElement('video');
+    vid.loop = vid.muted = vid.autoplay = vid.playsInline = true;
+    vid.setAttribute('playsinline',''); vid.className = 'demo-vid'; vid.preload = 'auto';
+    vid.onloadeddata = ()=> reveal(vid);
+    vid.src = base + '.mp4';
+    vid.load();
+  }
+  tryImg();
 }
 
 function ringHTML(rem, total){
