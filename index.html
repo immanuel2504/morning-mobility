@@ -4,15 +4,15 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
 <meta name="theme-color" content="#0a0f1d" />
-<meta name="description" content="Morning Mobility — a guided daily routine for posture, mobility and strength." />
+<meta name="description" content="Morning Health — daily soaked seeds, mobility routine, water tracking, and gut health coach." />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<meta name="apple-mobile-web-app-title" content="Morning Mobility" />
+<meta name="apple-mobile-web-app-title" content="Morning Health" />
 <meta name="mobile-web-app-capable" content="yes" />
 <link rel="manifest" href="manifest.webmanifest" />
 <link rel="icon" type="image/svg+xml" href="icon.svg" />
 <link rel="apple-touch-icon" href="icon.svg" />
-<title>Morning Mobility · Daily Routine</title>
+<title>Morning Health · Daily Coach</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -164,6 +164,68 @@
   .habit-tip { font-size:.82rem; color:var(--muted); line-height:1.5; margin:0; }
   .cal .d.habit { background: color-mix(in srgb, var(--good) 55%, var(--brand)); color:var(--brand-ink); font-weight:800; border:none; }
 
+  /* ---------- Home dashboard ---------- */
+  .home-header { margin-bottom:18px; }
+  .home-header h1 { margin:0; font-size:1.45rem; font-weight:800; letter-spacing:-.03em; }
+  .home-header p { margin:6px 0 0; color:var(--muted); font-size:.86rem; }
+  .health-score-pill { display:inline-flex; align-items:center; gap:8px; margin-top:12px; padding:8px 14px;
+    border-radius:999px; background:var(--surface); border:1px solid var(--border); font-weight:700; font-size:.88rem; box-shadow:var(--shadow-sm); }
+  .health-score-pill b { font-size:1.1rem; color:var(--brand); }
+  .dash-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--r-lg); padding:16px;
+    margin-bottom:14px; box-shadow:var(--shadow-sm); }
+  .dash-card .dc-head { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:12px; }
+  .dash-card .dc-title { font-weight:800; font-size:1rem; letter-spacing:-.02em; }
+  .dash-card .dc-sub { color:var(--muted); font-size:.8rem; margin-top:3px; line-height:1.4; }
+  .dash-card .dc-num { font-size:.72rem; font-weight:800; color:var(--brand); background:color-mix(in srgb, var(--brand) 12%, transparent);
+    border:1px solid color-mix(in srgb, var(--brand) 30%, var(--border)); border-radius:8px; padding:3px 8px; flex:0 0 auto; }
+  .dash-list { margin:0; padding:0; list-style:none; }
+  .dash-list li { display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid var(--border-soft); font-size:.9rem; }
+  .dash-list li:last-child { border-bottom:none; }
+  .dash-list .ck { width:22px; height:22px; border-radius:7px; border:2px solid var(--border); display:grid; place-items:center;
+    font-size:.75rem; cursor:pointer; flex:0 0 auto; transition:all .2s var(--ease); }
+  .dash-list .ck.on { background:var(--good); border-color:var(--good); color:#04231a; }
+  .dash-list .ck.todo { color:transparent; }
+  .dash-actions { display:flex; gap:8px; margin-top:12px; }
+  .dash-actions .btn { padding:12px 14px; font-size:.9rem; }
+  .water-row { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .water-amt { font-size:1.8rem; font-weight:800; color:var(--brand); }
+  .water-amt small { font-size:.85rem; color:var(--muted); font-weight:600; }
+  .water-btns { display:flex; gap:8px; }
+  .water-btns button { border:1px solid var(--border); background:var(--surface-2); color:var(--text); border-radius:12px;
+    padding:10px 14px; font-weight:700; cursor:pointer; font-family:inherit; }
+  .mood-row { margin-top:8px; }
+  .mood-row label { display:block; font-size:.78rem; color:var(--muted); font-weight:600; margin-bottom:8px; }
+  .mood-pick { display:flex; gap:8px; }
+  .mood-pick button { flex:1; border:1px solid var(--border); background:var(--surface-2); border-radius:12px;
+    padding:10px 6px; font-size:1.35rem; cursor:pointer; transition:all .2s var(--ease); }
+  .mood-pick button.on { border-color:var(--brand); background:color-mix(in srgb, var(--brand) 12%, var(--surface)); transform:scale(1.04); }
+  .night-card { background:linear-gradient(135deg, color-mix(in srgb, var(--brand-2) 18%, var(--surface)), var(--surface));
+    border:1px solid color-mix(in srgb, var(--brand-2) 35%, var(--border)); }
+  .streak-foot { text-align:center; padding:8px 0 4px; font-weight:700; font-size:.95rem; }
+  .streak-foot b { color:var(--warn); }
+  .trend-block { background:var(--surface); border:1px solid var(--border); border-radius:var(--r-md); padding:14px 16px; margin-bottom:12px; box-shadow:var(--shadow-sm); }
+  .trend-block h4 { margin:0 0 10px; font-size:.82rem; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:.6px; }
+  .trend-emojis { font-size:1.35rem; letter-spacing:4px; }
+  .trend-pct { font-size:1.6rem; font-weight:800; color:var(--brand); }
+  .learn-card { display:flex; align-items:center; gap:14px; background:var(--surface); border:1px solid var(--border);
+    border-radius:var(--r-md); padding:14px; margin-bottom:10px; cursor:pointer; box-shadow:var(--shadow-sm);
+    transition:transform .12s var(--ease), border-color .2s; }
+  .learn-card:active { transform:scale(.99); }
+  .learn-card .lc-ic { font-size:1.8rem; width:48px; height:48px; display:grid; place-items:center; background:var(--surface-2);
+    border-radius:14px; border:1px solid var(--border-soft); }
+  .learn-card .lc-meta { flex:1; }
+  .learn-card .lc-meta b { display:block; font-size:.95rem; }
+  .learn-card .lc-meta small { color:var(--muted); font-size:.78rem; }
+  .soak-cal-mini { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin-top:10px; }
+  .soak-cal-mini .sc { text-align:center; font-size:.58rem; color:var(--faint); font-weight:700; padding:6px 2px; border-radius:8px;
+    border:1px solid transparent; }
+  .soak-cal-mini .sc.today { background:color-mix(in srgb, var(--brand) 14%, var(--surface)); border-color:var(--brand); color:var(--text); }
+  .soak-cal-mini .sc .ic { display:block; font-size:.95rem; margin-bottom:2px; }
+  .info-block { background:var(--surface-2); border:1px solid var(--border-soft); border-radius:12px; padding:12px 14px; margin-bottom:10px; }
+  .info-block h4 { margin:0 0 8px; font-size:.74rem; text-transform:uppercase; letter-spacing:.8px; color:var(--brand); font-weight:800; }
+  .info-block ul { margin:0; padding-left:18px; }
+  .info-block li { margin:4px 0; font-size:.88rem; }
+  .info-block p { margin:0; font-size:.88rem; line-height:1.5; color:var(--text); }
   /* ---------- Buttons ---------- */
   .btn { border:none; border-radius:14px; padding:14px 18px; font-size:1rem; font-weight:700; cursor:pointer;
     color: var(--brand-ink); background: linear-gradient(135deg, var(--brand), var(--brand-2));
@@ -205,12 +267,12 @@
   .ex-card.done .ex-check { background: var(--good); border-color: var(--good); color:#04231a; }
 
   /* ---------- Tabs (bottom nav) ---------- */
-  nav.tabs { position: fixed; bottom:0; left:0; right:0; z-index:40; display:grid; grid-template-columns: repeat(4,1fr);
+  nav.tabs { position: fixed; bottom:0; left:0; right:0; z-index:40; display:grid; grid-template-columns: repeat(5,1fr);
     gap:4px; background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(16px) saturate(1.4);
     -webkit-backdrop-filter: blur(16px) saturate(1.4); border-top:1px solid var(--border);
-    padding: 9px 10px calc(9px + env(safe-area-inset-bottom)); }
+    padding: 9px 6px calc(9px + env(safe-area-inset-bottom)); }
   nav.tabs button { background:none; border:none; color: var(--faint); cursor:pointer; display:flex; flex-direction:column;
-    align-items:center; gap:3px; font-size:.66rem; font-weight:700; padding:7px 4px; border-radius:13px;
+    align-items:center; gap:3px; font-size:.6rem; font-weight:700; padding:7px 2px; border-radius:13px;
     transition: color .2s, background .2s; font-family:inherit; }
   nav.tabs button .ic { font-size:1.3rem; line-height:1; transition: transform .2s var(--ease); }
   nav.tabs button.active { color: var(--brand); background: color-mix(in srgb, var(--brand) 12%, transparent); }
@@ -372,7 +434,7 @@
 <body>
 <div class="wrap">
   <header class="topbar">
-    <div class="brand"><span class="logo">🌅</span><span>Morning Mobility</span></div>
+    <div class="brand"><span class="logo">🌅</span><span>Morning Health</span></div>
     <div class="topbar-actions">
       <button class="icon-btn" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">🌙</button>
       <button class="icon-btn" id="openSettings" title="Settings" aria-label="Settings">⚙️</button>
@@ -380,15 +442,27 @@
   </header>
 
   <div class="install-banner" id="installBanner" hidden>
-    <div class="ib-txt">📲 Install Morning Mobility<small>Add to your home screen for an app-like experience</small></div>
+    <div class="ib-txt">📲 Install Morning Health<small>Add to your home screen for an app-like experience</small></div>
     <div class="ib-act">
       <button class="ib-install" id="installBtn">Install</button>
       <button class="ib-x" id="installDismiss" aria-label="Dismiss">✕</button>
     </div>
   </div>
 
+  <!-- HOME TAB -->
+  <section id="tab-home" class="active">
+    <div class="home-header">
+      <h1 id="homeGreet">🌅 Good morning</h1>
+      <p id="homeDate">—</p>
+      <div class="health-score-pill">Today's Health Score: <b id="healthScore">0</b> / 6</div>
+    </div>
+    <div id="nightBanner"></div>
+    <div id="homeDashboard"></div>
+    <div class="streak-foot">Today's Streak <b id="homeStreak">🔥 0</b> Days</div>
+  </section>
+
   <!-- ROUTINE TAB -->
-  <section id="tab-routine" class="active">
+  <section id="tab-routine">
     <div class="hero">
       <div class="hero-head">
         <div class="hero-greet"><span id="greeting">Good morning</span><small id="dateLabel">—</small></div>
@@ -424,15 +498,10 @@
     <span class="reset-link" id="resetToday">Reset today's progress</span>
   </section>
 
-  <!-- CHECKLIST TAB -->
-  <section id="tab-checklist">
-    <h2 class="sec-title">✅ Daily Checklist</h2>
-    <div id="checklist"></div>
-  </section>
-
   <!-- PROGRESS TAB -->
   <section id="tab-progress">
     <h2 class="sec-title">📈 Your Progress</h2>
+    <div id="progressTrends"></div>
     <div class="habit-card">
       <h3>🎯 Habit Building</h3>
       <div class="habit-score-row"><b id="habitScore">0</b><span>/ 10</span></div>
@@ -454,30 +523,86 @@
     <p class="hint">Bright = habit minimum done. Full colour = entire routine done. Faded = partial.</p>
   </section>
 
-  <!-- PLAN TAB -->
-  <section id="tab-plan">
-    <h2 class="sec-title">🗓️ Weekly Progression</h2>
+  <!-- LEARN TAB -->
+  <section id="tab-learn">
+    <h2 class="sec-title">📚 Learn</h2>
+    <p class="hint">Tap any seed to see preparation, benefits, and precautions.</p>
+    <div id="learnList"></div>
+    <h2 class="sec-title" style="margin-top:22px">📅 Weekly Soak Calendar</h2>
+    <div class="dash-card" id="soakCalendar"></div>
+    <h2 class="sec-title" style="margin-top:22px">🗓️ Mobility Progression</h2>
     <div id="weekPlan"></div>
-    <h2 class="sec-title" style="margin-top:22px">🎯 This Routine Targets</h2>
-    <div class="week-card">
-      <ul>
-        <li>Neck stiffness & shoulder blade pain</li>
-        <li>Arm heaviness & thoracic tightness</li>
-        <li>Poor posture</li>
-        <li>Ankle mobility restriction</li>
-        <li>Pelvic floor relaxation</li>
-        <li>General body stiffness</li>
-      </ul>
+  </section>
+
+  <!-- SETTINGS TAB -->
+  <section id="tab-settings">
+    <h2 class="sec-title">⚙️ Settings</h2>
+    <div id="settingsPanel" class="dash-card" style="padding:4px 16px 8px">
+      <div class="opt">
+        <div class="l">👤 Your name<small>Shown on the home screen greeting</small></div>
+        <input type="text" id="setName" maxlength="24" style="border:1px solid var(--border);background:var(--surface-2);color:var(--text);border-radius:10px;padding:8px 12px;font:inherit;font-weight:600;width:130px;text-align:right;">
+      </div>
+      <div class="opt">
+        <div class="l">💧 Daily water goal<small>Liters tracked on home screen</small></div>
+        <div class="stepper">
+          <button id="waterGoalMinus">−</button>
+          <b><span id="waterGoalVal">3</span> L</b>
+          <button id="waterGoalPlus">+</button>
+        </div>
+      </div>
+      <div class="opt">
+        <div class="l">🎨 Light theme<small>Switch between dark and light mode</small></div>
+        <label class="switch"><input type="checkbox" id="setLight"><span class="slider"></span></label>
+      </div>
+      <div class="opt">
+        <div class="l">🔊 Sound cues<small>Beeps when timers finish & count down</small></div>
+        <label class="switch"><input type="checkbox" id="setSound"><span class="slider"></span></label>
+      </div>
+      <div class="opt">
+        <div class="l">🗣️ Voice coaching<small>Speaks exercise names & side switches</small></div>
+        <label class="switch"><input type="checkbox" id="setVoice"><span class="slider"></span></label>
+      </div>
+      <div class="opt">
+        <div class="l">🫁 Breath guide<small>Inhale & exhale on every exercise (auto-starts)</small></div>
+        <label class="switch"><input type="checkbox" id="setBreath"><span class="slider"></span></label>
+      </div>
+      <div class="opt">
+        <div class="l">⏩ Auto-advance<small>Move to next exercise automatically after rest</small></div>
+        <label class="switch"><input type="checkbox" id="setAuto"><span class="slider"></span></label>
+      </div>
+      <div class="opt">
+        <div class="l">😴 Keep screen awake<small>Prevent screen from sleeping during workout</small></div>
+        <label class="switch"><input type="checkbox" id="setWake"><span class="slider"></span></label>
+      </div>
+      <div class="opt">
+        <div class="l">🧘 Essentials only<small>Skip the optional warm-towel step</small></div>
+        <label class="switch"><input type="checkbox" id="setEssential"><span class="slider"></span></label>
+      </div>
+      <div class="opt">
+        <div class="l">🎯 Weekly habit goal<small>Target habit days per week (5 core exercises)</small></div>
+        <div class="stepper">
+          <button id="habitMinus">−</button>
+          <b id="habitVal">5</b>
+          <button id="habitPlus">+</button>
+        </div>
+      </div>
+      <div class="opt">
+        <div class="l">⏱️ Rest between exercises</div>
+        <div class="stepper">
+          <button id="restMinus">−</button><b><span id="restVal">15</span>s</b><button id="restPlus">+</button>
+        </div>
+      </div>
     </div>
   </section>
 </div>
 
 <!-- BOTTOM NAV -->
 <nav class="tabs">
-  <button data-tab="routine" class="active"><span class="ic">🏃</span>Routine</button>
-  <button data-tab="checklist"><span class="ic">✅</span>Checklist</button>
+  <button data-tab="home" class="active"><span class="ic">🏠</span>Home</button>
+  <button data-tab="routine"><span class="ic">📅</span>Routine</button>
   <button data-tab="progress"><span class="ic">📈</span>Progress</button>
-  <button data-tab="plan"><span class="ic">🗓️</span>Plan</button>
+  <button data-tab="learn"><span class="ic">📚</span>Learn</button>
+  <button data-tab="settings"><span class="ic">⚙️</span>Settings</button>
 </nav>
 
 <!-- GUIDED PLAYER -->
@@ -495,56 +620,16 @@
   </div>
 </div>
 
-<!-- SETTINGS SHEET -->
-<div class="modal" id="settingsModal">
+<!-- SOAK DETAIL MODAL -->
+<div class="modal" id="soakModal">
   <div class="sheet">
     <div class="sheet-grip"></div>
-    <h2>⚙️ Settings</h2>
-    <div class="opt">
-      <div class="l">🎨 Light theme<small>Switch between dark and light mode</small></div>
-      <label class="switch"><input type="checkbox" id="setLight"><span class="slider"></span></label>
-    </div>
-    <div class="opt">
-      <div class="l">🔊 Sound cues<small>Beeps when timers finish & count down</small></div>
-      <label class="switch"><input type="checkbox" id="setSound"><span class="slider"></span></label>
-    </div>
-    <div class="opt">
-      <div class="l">🗣️ Voice coaching<small>Speaks exercise names & side switches</small></div>
-      <label class="switch"><input type="checkbox" id="setVoice"><span class="slider"></span></label>
-    </div>
-    <div class="opt">
-      <div class="l">🫁 Breath guide<small>Inhale & exhale on every exercise (auto-starts)</small></div>
-      <label class="switch"><input type="checkbox" id="setBreath"><span class="slider"></span></label>
-    </div>
-    <div class="opt">
-      <div class="l">⏩ Auto-advance<small>Move to next exercise automatically after rest</small></div>
-      <label class="switch"><input type="checkbox" id="setAuto"><span class="slider"></span></label>
-    </div>
-    <div class="opt">
-      <div class="l">😴 Keep screen awake<small>Prevent screen from sleeping during workout</small></div>
-      <label class="switch"><input type="checkbox" id="setWake"><span class="slider"></span></label>
-    </div>
-    <div class="opt">
-      <div class="l">🧘 Essentials only<small>Skip the optional warm-towel step</small></div>
-      <label class="switch"><input type="checkbox" id="setEssential"><span class="slider"></span></label>
-    </div>
-    <div class="opt">
-      <div class="l">🎯 Weekly habit goal<small>Target habit days per week (5 core exercises)</small></div>
-      <div class="stepper">
-        <button id="habitMinus">−</button>
-        <b id="habitVal">5</b>
-        <button id="habitPlus">+</button>
-      </div>
-    </div>
-    <div class="opt">
-      <div class="l">⏱️ Rest between exercises</div>
-      <div class="stepper">
-        <button id="restMinus">−</button><b><span id="restVal">15</span>s</b><button id="restPlus">+</button>
-      </div>
-    </div>
-    <button class="btn" id="closeSettings" style="margin-top:18px;">Done</button>
+    <h2 id="soakModalTitle">—</h2>
+    <div id="soakModalBody"></div>
+    <button class="btn secondary" id="closeSoak" style="margin-top:14px">Close</button>
   </div>
 </div>
+
 
 <svg width="0" height="0"><defs>
   <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -662,6 +747,64 @@ const WEEK_PLAN = [
   { h:'Weeks 5–8 · Strength', items:['Regular push-ups','Assisted / full pull-ups if pain-free'] },
 ];
 
+/* Weekly soak schedule (index = day of week, 0 = Sunday) */
+const SOAK_BY_DOW = ['raisins','fenugreek','raisins','fennel','chia','fenugreek','figs'];
+const SOAKS = {
+  fenugreek: {
+    id:'fenugreek', name:'Fenugreek Seeds', icon:'🌱',
+    quantity:'1 tsp seeds', water:'250 ml water', soak:'Soak overnight',
+    prep:['1 tsp fenugreek seeds','250 ml water','Soak overnight'],
+    morning:['Drink the soaked water','Eat the soaked seeds on an empty stomach'],
+    benefits:['Supports digestion','May reduce bloating','Gut health support'],
+    science:'Fenugreek seeds are rich in soluble fiber (galactomannan) and mucilage, which can slow digestion and support healthy blood sugar. Traditional use in Ayurveda links fenugreek to digestive comfort.',
+    precautions:'Start with small amounts. Avoid if pregnant without medical advice. May interact with blood-sugar medications — consult your doctor.'
+  },
+  raisins: {
+    id:'raisins', name:'Black Raisins', icon:'🍇',
+    quantity:'10–15 raisins', water:'250 ml water', soak:'Soak overnight',
+    prep:['10–15 black raisins','250 ml water','Soak overnight'],
+    morning:['Drink the soaked water','Eat the soaked raisins'],
+    benefits:['Natural iron support','Gentle energy','Digestive fiber'],
+    science:'Black raisins provide iron, potassium, and antioxidants. Soaking may make them easier to digest and slightly increase bioavailability of certain nutrients.',
+    precautions:'High in natural sugars — moderate if you have diabetes. Rinse if sulfite-sensitive.'
+  },
+  fennel: {
+    id:'fennel', name:'Fennel Seeds', icon:'🌿',
+    quantity:'1 tsp seeds', water:'250 ml water', soak:'Soak overnight',
+    prep:['1 tsp fennel seeds','250 ml water','Soak overnight'],
+    morning:['Drink the fennel water','Chew and eat the soaked seeds'],
+    benefits:['Reduces gas & bloating','Soothes digestion','Fresh breath'],
+    science:'Fennel contains anethole and other volatile oils that may relax GI smooth muscle and reduce bloating. Widely used in traditional medicine for digestive comfort.',
+    precautions:'Generally safe in food amounts. Avoid large medicinal doses if pregnant. May have mild estrogenic effects.'
+  },
+  chia: {
+    id:'chia', name:'Chia Seeds', icon:'⚫',
+    quantity:'1 tsp seeds', water:'250 ml water', soak:'Soak overnight',
+    prep:['1 tsp chia seeds','250 ml water','Soak overnight (forms a gel)'],
+    morning:['Drink the chia water (stir first)','Eat any gelled seeds'],
+    benefits:['High fiber','Omega-3 ALA','Sustained hydration'],
+    science:'Chia seeds absorb up to 10× their weight in water, forming a gel rich in soluble fiber and plant-based omega-3 (ALA). This can support bowel regularity.',
+    precautions:'Always soak before eating — dry chia can swell in the throat. Increase fiber gradually to avoid gas. Drink extra water through the day.'
+  },
+  figs: {
+    id:'figs', name:'Dry Figs', icon:'🍈',
+    quantity:'2 dry figs', water:'250 ml water', soak:'Soak overnight',
+    prep:['2 dry figs','250 ml water','Soak overnight'],
+    morning:['Drink the soak water','Eat the softened figs'],
+    benefits:['Fiber for regularity','Natural minerals','Gentle laxative effect'],
+    science:'Dried figs are high in soluble and insoluble fiber plus calcium and potassium. Soaking softens fiber and may improve tolerance for sensitive stomachs.',
+    precautions:'High in natural sugars and calories. Introduce slowly if constipated — too much fiber at once can cause bloating.'
+  }
+};
+const DOW_LABELS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const HOME_MOBILITY = [
+  { id:'belly', label:'Belly Breathing' },
+  { id:'deadhang', label:'Dead Hang' },
+  { id:'incline', label:'Push-ups' },
+  { id:'child', label:'Stretching' }
+];
+const MOOD_EMOJI = { good:'😊', ok:'😐', bad:'😣' };
+
 /* 5 core exercises (~15 min) — counts as a "habit day" even without the full routine */
 const MINIMUM_IDS = ['belly','chintuck','catcow','child','mountain'];
 
@@ -672,16 +815,74 @@ const LS = {
   set(k, v){ localStorage.setItem(k, JSON.stringify(v)); }
 };
 
-const defSettings = { sound:true, voice:true, breathGuide:true, autoAdvance:true, wake:true, essential:false, restSec:15, habitGoal:5, theme:null };
+const defSettings = { sound:true, voice:true, breathGuide:true, autoAdvance:true, wake:true, essential:false, restSec:15, habitGoal:5, theme:null, userName:'Immanuel', waterGoal:3 };
 let settings = Object.assign({}, defSettings, LS.get('settings', {}));
 function saveSettings(){ LS.set('settings', settings); }
+
+function dateKey(d){ return (d || new Date()).toISOString().slice(0,10); }
+function soakForDate(d){ return SOAKS[SOAK_BY_DOW[d.getDay()]]; }
+function tomorrowSoak(){ const t = new Date(); t.setDate(t.getDate()+1); return soakForDate(t); }
+function todaySoak(){ return soakForDate(new Date()); }
+
+function getDailyHealth(key){
+  const all = LS.get('dailyHealth', {});
+  const k = key || todayKey();
+  return Object.assign({ soakSeeds:false, soakWater:false, drinkWater:false, eatSeeds:false, waterLiters:0, bloating:null, energy:null }, all[k] || {});
+}
+function prepForDay(key){
+  const d = new Date(key + 'T12:00:00');
+  d.setDate(d.getDate() - 1);
+  const prev = getDailyHealth(dateKey(d));
+  return { soakSeeds: !!prev.soakSeeds, soakWater: !!prev.soakWater };
+}
+function lastNightPrep(){ return prepForDay(todayKey()); }
+function setDailyHealth(patch, key){
+  const all = LS.get('dailyHealth', {});
+  const k = key || todayKey();
+  all[k] = Object.assign(getDailyHealth(k), patch);
+  LS.set('dailyHealth', all);
+  updateHealthStreak();
+  renderHome();
+  renderProgressTrends();
+}
+function healthScoreParts(key){
+  const k = key || todayKey();
+  const h = getDailyHealth(k);
+  const done = (LS.get('history', {})[k] || []);
+  const goal = settings.waterGoal || 3;
+  const prep = prepForDay(k);
+  return {
+    soakPrep: !!(prep.soakSeeds && prep.soakWater),
+    drinkWater: !!h.drinkWater,
+    eatSeeds: !!h.eatSeeds,
+    mobility: isMinimumComplete(done),
+    waterGoal: (h.waterLiters || 0) >= goal,
+    gutHealth: !!(h.bloating && h.energy)
+  };
+}
+function healthScore(key){
+  const p = healthScoreParts(key);
+  return Object.values(p).filter(Boolean).length;
+}
+
+function updateHealthStreak(){
+  const all = LS.get('dailyHealth', {});
+  const hist = LS.get('history', {});
+  let cur = 0; let cursor = new Date();
+  const ok = k => healthScore(k) >= 4 || isMinimumComplete(hist[k] || []);
+  if(!ok(dateKey(cursor))) cursor.setDate(cursor.getDate() - 1);
+  while(ok(dateKey(cursor))){ cur++; cursor.setDate(cursor.getDate() - 1); }
+  let best = LS.get('bestHealthStreak', 0);
+  if(cur > best){ best = cur; LS.set('bestHealthStreak', best); }
+  LS.set('curHealthStreak', cur);
+}
 
 function activeList(){ return settings.essential ? EXERCISES.filter(e=>!e.optional) : EXERCISES; }
 
 function getDone(){ const all = LS.get('history', {}); return all[todayKey()] || []; }
 function setDone(arr){
   const all = LS.get('history', {});
-  all[todayKey()] = arr; LS.set('history', all); updateStreak();
+  all[todayKey()] = arr; LS.set('history', all); updateStreak(); updateHealthStreak();
 }
 function toggleDone(id){
   let d = getDone();
@@ -874,25 +1075,252 @@ function renderProgress(){
   renderHabitUI();
 }
 
-/* ---------------- RENDER: checklist ---------------- */
-function renderChecklist(){
-  const done = getDone();
-  const el = document.getElementById('checklist');
-  el.innerHTML = EXERCISES.map(ex=>{
-    const d = done.includes(ex.id);
-    return `<div class="check-item ${d?'done':''}" data-toggle="${ex.id}">
-      <div class="box">✓</div><div class="nm">${ex.icon} ${ex.name}</div></div>`;
-  }).join('');
-  el.querySelectorAll('[data-toggle]').forEach(it=>{
-    it.addEventListener('click', ()=> toggleDone(it.dataset.toggle));
-  });
-}
-
 document.getElementById('weekPlan').innerHTML = WEEK_PLAN.map(w=>
   `<div class="week-card"><h3>${w.h}</h3><ul>${w.items.map(i=>`<li>${i}</li>`).join('')}</ul></div>`
 ).join('');
 
-function renderAll(){ renderList(); renderProgress(); renderChecklist(); }
+function greetText(){
+  const hr = new Date().getHours();
+  const base = hr < 12 ? 'Good morning' : hr < 17 ? 'Good afternoon' : 'Good evening';
+  const name = settings.userName || 'there';
+  return `🌅 ${base}, ${name}`;
+}
+
+function renderNightBanner(){
+  const el = document.getElementById('nightBanner');
+  if(!el) return;
+  const hr = new Date().getHours();
+  const soak = tomorrowSoak();
+  const h = getDailyHealth();
+  if(hr < 21){ el.innerHTML = ''; return; }
+  el.innerHTML = `<div class="dash-card night-card">
+    <div class="dc-head"><div><div class="dc-title">🌙 Prepare Tomorrow</div>
+      <div class="dc-sub">Tomorrow: ${soak.icon} ${soak.name}</div></div></div>
+    <ul class="dash-list">
+      <li><span class="ck ${h.soakSeeds?'on':'todo'}" data-night="soakSeeds">${h.soakSeeds?'✓':''}</span> ${soak.quantity}</li>
+      <li><span class="ck ${h.soakWater?'on':'todo'}" data-night="soakWater">${h.soakWater?'✓':''}</span> ${soak.water}</li>
+    </ul>
+    <div class="dash-actions"><button class="btn" id="nightPrepared">${h.soakSeeds && h.soakWater ? '✓ Prepared' : 'Mark Prepared'}</button></div>
+  </div>`;
+  el.querySelectorAll('[data-night]').forEach(ck=>{
+    ck.addEventListener('click', ()=>{
+      const k = ck.dataset.night;
+      const cur = getDailyHealth();
+      setDailyHealth({ [k]: !cur[k] });
+    });
+  });
+  const btn = document.getElementById('nightPrepared');
+  if(btn) btn.addEventListener('click', ()=> setDailyHealth({ soakSeeds:true, soakWater:true }));
+}
+
+function renderHome(){
+  const soak = todaySoak();
+  const h = getDailyHealth();
+  const prep = lastNightPrep();
+  const done = getDone();
+  const score = healthScore();
+  const parts = healthScoreParts();
+
+  const hg = document.getElementById('homeGreet');
+  const hd = document.getElementById('homeDate');
+  const hs = document.getElementById('healthScore');
+  const hst = document.getElementById('homeStreak');
+  if(hg) hg.textContent = greetText();
+  if(hd) hd.textContent = new Date().toLocaleDateString(undefined,{weekday:'long', month:'long', day:'numeric'});
+  if(hs) hs.textContent = score;
+  if(hst) hst.textContent = '🔥 ' + LS.get('curHealthStreak', 0);
+
+  renderNightBanner();
+
+  const mobItems = HOME_MOBILITY.map(m=>{
+    const on = done.includes(m.id);
+    return `<li><span class="ck ${on?'on':'todo'}" data-mob="${m.id}">${on?'✓':''}</span> ${m.label}</li>`;
+  }).join('');
+
+  const goal = settings.waterGoal || 3;
+  const wl = h.waterLiters || 0;
+
+  const dash = document.getElementById('homeDashboard');
+  if(!dash) return;
+  dash.innerHTML = `
+    <div class="dash-card">
+      <div class="dc-head"><div><div class="dc-title">1️⃣ Drink Soaked Water</div>
+        <div class="dc-sub">${soak.icon} ${soak.name}</div></div>
+        <span class="dc-num" data-soak="${soak.id}" style="cursor:pointer">ℹ️</span></div>
+      <div style="font-size:.78rem;font-weight:700;color:var(--muted);margin-bottom:6px">Tonight</div>
+      <ul class="dash-list">
+        <li><span class="ck ${prep.soakSeeds?'on':'todo'}">${prep.soakSeeds?'✓':''}</span> ${soak.quantity}</li>
+        <li><span class="ck ${prep.soakWater?'on':'todo'}">${prep.soakWater?'✓':''}</span> ${soak.water}</li>
+      </ul>
+      <div style="font-size:.78rem;font-weight:700;color:var(--muted);margin:10px 0 6px">Morning</div>
+      <ul class="dash-list">
+        <li><span class="ck ${h.drinkWater?'on':'todo'}" data-h="drinkWater">${h.drinkWater?'✓':''}</span> Drink water</li>
+        <li><span class="ck ${h.eatSeeds?'on':'todo'}" data-h="eatSeeds">${h.eatSeeds?'✓':''}</span> Eat seeds</li>
+      </ul>
+      <div class="dash-actions">
+        <button class="btn secondary" id="markSoakDone">${parts.drinkWater && parts.eatSeeds ? '✓ Complete' : 'Mark Complete'}</button>
+      </div>
+    </div>
+    <div class="dash-card">
+      <div class="dc-head"><div class="dc-title">2️⃣ Morning Mobility</div></div>
+      <ul class="dash-list">${mobItems}</ul>
+      <div class="dash-actions"><button class="btn" id="homeStartRoutine">Start Routine</button></div>
+    </div>
+    <div class="dash-card">
+      <div class="dc-head"><div class="dc-title">3️⃣ Water Tracker</div></div>
+      <div class="water-row">
+        <div class="water-amt">💧 ${wl.toFixed(1)} <small>/ ${goal} L</small></div>
+        <div class="water-btns">
+          <button data-water="-0.25">−</button>
+          <button data-water="0.25">+250 ml</button>
+          <button data-water="0.5">+500 ml</button>
+        </div>
+      </div>
+    </div>
+    <div class="dash-card">
+      <div class="dc-head"><div class="dc-title">4️⃣ Gut Health Check</div></div>
+      <div class="mood-row"><label>Bloating</label>
+        <div class="mood-pick" data-mood="bloating">
+          <button class="${h.bloating==='good'?'on':''}" data-v="good">😊</button>
+          <button class="${h.bloating==='ok'?'on':''}" data-v="ok">😐</button>
+          <button class="${h.bloating==='bad'?'on':''}" data-v="bad">😣</button>
+        </div></div>
+      <div class="mood-row"><label>Energy</label>
+        <div class="mood-pick" data-mood="energy">
+          <button class="${h.energy==='good'?'on':''}" data-v="good">😊</button>
+          <button class="${h.energy==='ok'?'on':''}" data-v="ok">😐</button>
+          <button class="${h.energy==='bad'?'on':''}" data-v="bad">😣</button>
+        </div></div>
+    </div>`;
+
+  dash.querySelector('[data-soak]')?.addEventListener('click', ()=> openSoakModal(soak.id));
+  dash.querySelectorAll('[data-h]').forEach(ck=>{
+    ck.addEventListener('click', ()=>{
+      const k = ck.dataset.h;
+      const cur = getDailyHealth();
+      setDailyHealth({ [k]: !cur[k] });
+    });
+  });
+  document.getElementById('markSoakDone')?.addEventListener('click', ()=> setDailyHealth({ drinkWater:true, eatSeeds:true }));
+  dash.querySelectorAll('[data-mob]').forEach(ck=>{
+    ck.addEventListener('click', ()=> toggleDone(ck.dataset.mob));
+  });
+  dash.querySelectorAll('[data-water]').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      const delta = parseFloat(b.dataset.water);
+      const cur = getDailyHealth();
+      setDailyHealth({ waterLiters: Math.max(0, Math.round((cur.waterLiters + delta) * 4) / 4) });
+    });
+  });
+  dash.querySelectorAll('.mood-pick').forEach(row=>{
+    const field = row.dataset.mood;
+    row.querySelectorAll('button').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const cur = getDailyHealth();
+        const v = btn.dataset.v;
+        setDailyHealth({ [field]: cur[field] === v ? null : v });
+      });
+    });
+  });
+  document.getElementById('homeStartRoutine')?.addEventListener('click', ()=>{
+    goTab('routine');
+    setTimeout(resumeSmart, 200);
+  });
+}
+
+function renderProgressTrends(){
+  const el = document.getElementById('progressTrends');
+  if(!el) return;
+  const hist = LS.get('history', {});
+  const health = LS.get('dailyHealth', {});
+  const goal = settings.waterGoal || 3;
+  let gutEm = '', waterPct = 0, mobPct = 0, days = 0;
+
+  for(let i = 6; i >= 0; i--){
+    const d = new Date(); d.setDate(d.getDate() - i);
+    const k = dateKey(d);
+    const h = Object.assign({ waterLiters:0, bloating:null, energy:null }, health[k] || {});
+    const done = hist[k] || [];
+    const avgMood = [h.bloating, h.energy].filter(Boolean);
+    if(avgMood.length){
+      const bad = avgMood.filter(x=>x==='bad').length;
+      const good = avgMood.filter(x=>x==='good').length;
+      gutEm += bad ? MOOD_EMOJI.bad : good >= avgMood.length ? MOOD_EMOJI.good : MOOD_EMOJI.ok;
+    } else gutEm += '·';
+    waterPct += Math.min(100, ((h.waterLiters||0) / goal) * 100);
+    mobPct += isMinimumComplete(done) ? 100 : (done.length ? Math.round(done.filter(id=>HOME_MOBILITY.some(m=>m.id===id)).length / HOME_MOBILITY.length * 100) : 0);
+    days++;
+  }
+  waterPct = Math.round(waterPct / days);
+  mobPct = Math.round(mobPct / days);
+  const streak = LS.get('curHealthStreak', 0);
+
+  el.innerHTML = `<h2 class="sec-title" style="margin-top:0">Last 7 Days</h2>
+    <div class="trend-block"><h4>Gut Health</h4><div class="trend-emojis">${gutEm}</div></div>
+    <div class="trend-block"><h4>Water Intake</h4><div class="trend-pct">${waterPct}%</div></div>
+    <div class="trend-block"><h4>Morning Routine</h4><div class="trend-pct">${mobPct}%</div></div>
+    <div class="trend-block"><h4>Current Streak</h4><div class="trend-pct" style="color:var(--warn)">🔥 ${streak} Days</div></div>`;
+}
+
+function renderLearn(){
+  const list = document.getElementById('learnList');
+  if(list){
+    list.innerHTML = Object.values(SOAKS).map(s=>
+      `<div class="learn-card" data-learn="${s.id}">
+        <div class="lc-ic">${s.icon}</div>
+        <div class="lc-meta"><b>${s.name}</b><small>${s.benefits.slice(0,2).join(' · ')}</small></div>
+        <span style="color:var(--faint)">›</span></div>`
+    ).join('');
+    list.querySelectorAll('[data-learn]').forEach(c=>{
+      c.addEventListener('click', ()=> openSoakModal(c.dataset.learn));
+    });
+  }
+  renderSoakCalendar();
+}
+
+function renderSoakCalendar(){
+  const el = document.getElementById('soakCalendar');
+  if(!el) return;
+  const today = new Date().getDay();
+  let rows = '';
+  for(let i = 1; i <= 7; i++){
+    const dow = i % 7;
+    const s = SOAKS[SOAK_BY_DOW[dow]];
+    const isToday = dow === today;
+    rows += `<div class="sc ${isToday?'today':''}"><span class="ic">${s.icon}</span>${DOW_LABELS[dow]}</div>`;
+  }
+  el.innerHTML = `<div style="font-weight:700;margin-bottom:4px">Your weekly rotation</div>
+    <div class="soak-cal-mini">${rows}</div>
+    <ul class="dash-list" style="margin-top:14px">
+      ${[1,2,3,4,5,6,0].map(dow=>{
+        const s = SOAKS[SOAK_BY_DOW[dow]];
+        const dayName = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][dow];
+        return `<li style="border:none;padding:5px 0"><span>${s.icon}</span> <b>${dayName}</b> — ${s.name}</li>`;
+      }).join('')}
+    </ul>`;
+}
+
+function openSoakModal(id){
+  const s = SOAKS[id]; if(!s) return;
+  document.getElementById('soakModalTitle').textContent = s.icon + ' ' + s.name;
+  document.getElementById('soakModalBody').innerHTML = `
+    <div class="info-block"><h4>Preparation</h4><ul>${s.prep.map(p=>`<li>${p}</li>`).join('')}</ul></div>
+    <div class="info-block"><h4>Morning</h4><ul>${s.morning.map(p=>`<li>${p}</li>`).join('')}</ul></div>
+    <div class="info-block"><h4>Benefits</h4><ul>${s.benefits.map(p=>`<li>${p}</li>`).join('')}</ul></div>
+    <div class="info-block"><h4>Scientific information</h4><p>${s.science}</p></div>
+    <div class="info-block"><h4>Precautions</h4><p>${s.precautions}</p></div>`;
+  document.getElementById('soakModal').classList.add('open');
+}
+document.getElementById('closeSoak').addEventListener('click', ()=> document.getElementById('soakModal').classList.remove('open'));
+document.getElementById('soakModal').addEventListener('click', e=>{ if(e.target.id==='soakModal') document.getElementById('soakModal').classList.remove('open'); });
+
+function renderAll(){
+  renderHome();
+  renderList();
+  renderProgress();
+  renderProgressTrends();
+  renderLearn();
+}
 
 /* ---------------- TABS ---------------- */
 document.querySelectorAll('nav.tabs button').forEach(b=>{
@@ -1399,7 +1827,7 @@ function renderComplete(){
     </div>
     <button class="btn" id="doneHome" style="max-width:320px;">Back to home</button>
   </div>`;
-  document.getElementById('doneHome').addEventListener('click', ()=>{ closePlayer(); goTab('progress'); });
+  document.getElementById('doneHome').addEventListener('click', ()=>{ closePlayer(); goTab('home'); });
   renderHabitUI();
 }
 
@@ -1419,8 +1847,11 @@ document.getElementById('resetToday').addEventListener('click', ()=>{
 });
 
 /* ---------------- SETTINGS UI ---------------- */
-const settingsModal=document.getElementById('settingsModal');
 function syncSettingsUI(){
+  const sn = document.getElementById('setName');
+  if(sn) sn.value = settings.userName || 'Immanuel';
+  const wg = document.getElementById('waterGoalVal');
+  if(wg) wg.textContent = settings.waterGoal || 3;
   document.getElementById('setLight').checked = currentTheme()==='light';
   document.getElementById('setSound').checked=settings.sound;
   document.getElementById('setVoice').checked=settings.voice;
@@ -1431,9 +1862,10 @@ function syncSettingsUI(){
   document.getElementById('habitVal').textContent=settings.habitGoal;
   document.getElementById('restVal').textContent=settings.restSec;
 }
-document.getElementById('openSettings').addEventListener('click', ()=>{ syncSettingsUI(); settingsModal.classList.add('open'); });
-document.getElementById('closeSettings').addEventListener('click', ()=> settingsModal.classList.remove('open'));
-settingsModal.addEventListener('click', e=>{ if(e.target===settingsModal) settingsModal.classList.remove('open'); });
+document.getElementById('openSettings').addEventListener('click', ()=>{ syncSettingsUI(); goTab('settings'); });
+document.getElementById('setName')?.addEventListener('change', e=>{ settings.userName = e.target.value.trim() || 'Immanuel'; saveSettings(); renderHome(); });
+document.getElementById('waterGoalPlus')?.addEventListener('click', ()=>{ settings.waterGoal = Math.min(5, (settings.waterGoal||3)+0.5); syncSettingsUI(); saveSettings(); renderHome(); });
+document.getElementById('waterGoalMinus')?.addEventListener('click', ()=>{ settings.waterGoal = Math.max(1, (settings.waterGoal||3)-0.5); syncSettingsUI(); saveSettings(); renderHome(); });
 function bindToggle(id, key, after){
   document.getElementById(id).addEventListener('change', e=>{ settings[key]=e.target.checked; saveSettings(); if(after) after(); });
 }
@@ -1483,6 +1915,8 @@ if(window.matchMedia){
   window.matchMedia('(prefers-color-scheme: light)').addEventListener?.('change', ()=>{ if(!settings.theme) applyTheme(); });
 }
 updateStreak();
+updateHealthStreak();
+syncSettingsUI();
 renderAll();
 </script>
 </body>

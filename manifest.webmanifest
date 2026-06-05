@@ -1,7 +1,7 @@
 {
-  "name": "Morning Mobility — Daily Routine",
-  "short_name": "Morning Mobility",
-  "description": "A guided daily routine for posture, mobility, and strength.",
+  "name": "Morning Health — Daily Coach",
+  "short_name": "Morning Health",
+  "description": "Daily soaked seeds, mobility routine, water tracking, and gut health coach.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
