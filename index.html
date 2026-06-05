@@ -181,8 +181,8 @@
   .dash-list { margin:0; padding:0; list-style:none; }
   .dash-list li { display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid var(--border-soft); font-size:.9rem; }
   .dash-list li:last-child { border-bottom:none; }
-  .dash-list .ck { width:22px; height:22px; border-radius:7px; border:2px solid var(--border); display:grid; place-items:center;
-    font-size:.75rem; cursor:pointer; flex:0 0 auto; transition:all .2s var(--ease); }
+  .dash-list .ck { width:28px; height:28px; min-width:28px; border-radius:8px; border:2px solid var(--border); display:grid; place-items:center;
+    font-size:.8rem; cursor:pointer; flex:0 0 auto; transition:all .2s var(--ease); touch-action:manipulation; -webkit-user-select:none; user-select:none; }
   .dash-list .ck.on { background:var(--good); border-color:var(--good); color:#04231a; }
   .dash-list .ck.todo { color:transparent; }
   .dash-actions { display:flex; gap:8px; margin-top:12px; }
@@ -809,17 +809,24 @@ const MOOD_EMOJI = { good:'😊', ok:'😐', bad:'😣' };
 const MINIMUM_IDS = ['belly','chintuck','catcow','child','mountain'];
 
 /* ---------------- STORAGE ---------------- */
-const todayKey = () => new Date().toISOString().slice(0,10);
+function localDateKey(d){
+  const x = d || new Date();
+  return `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}`;
+}
+const todayKey = () => localDateKey();
+function yesterdayKey(){
+  const d = new Date(); d.setDate(d.getDate()-1); return localDateKey(d);
+}
 const LS = {
   get(k, def){ try { const v = localStorage.getItem(k); return v===null ? def : JSON.parse(v); } catch { return def; } },
-  set(k, v){ localStorage.setItem(k, JSON.stringify(v)); }
+  set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch { return false; } }
 };
 
 const defSettings = { sound:true, voice:true, breathGuide:true, autoAdvance:true, wake:true, essential:false, restSec:15, habitGoal:5, theme:null, userName:'Immanuel', waterGoal:3 };
 let settings = Object.assign({}, defSettings, LS.get('settings', {}));
 function saveSettings(){ LS.set('settings', settings); }
 
-function dateKey(d){ return (d || new Date()).toISOString().slice(0,10); }
+function dateKey(d){ return localDateKey(d); }
 function soakForDate(d){ return SOAKS[SOAK_BY_DOW[d.getDay()]]; }
 function tomorrowSoak(){ const t = new Date(); t.setDate(t.getDate()+1); return soakForDate(t); }
 function todaySoak(){ return soakForDate(new Date()); }
@@ -840,7 +847,7 @@ function setDailyHealth(patch, key){
   const all = LS.get('dailyHealth', {});
   const k = key || todayKey();
   all[k] = Object.assign(getDailyHealth(k), patch);
-  LS.set('dailyHealth', all);
+  if(!LS.set('dailyHealth', all)) return;
   updateHealthStreak();
   renderHome();
   renderProgressTrends();
@@ -903,7 +910,7 @@ function weekHabitDays(){
   let n = 0;
   for(let i = 0; i < 7; i++){
     const d = new Date(); d.setDate(d.getDate() - i);
-    if(isMinimumComplete(all[d.toISOString().slice(0,10)] || [])) n++;
+    if(isMinimumComplete(all[localDateKey(d)] || [])) n++;
   }
   return n;
 }
@@ -917,7 +924,7 @@ function daysSinceLastActivity(){
   const all = LS.get('history', {});
   for(let i = 1; i < 60; i++){
     const d = new Date(); d.setDate(d.getDate() - i);
-    if((all[d.toISOString().slice(0,10)] || []).length) return i;
+    if((all[localDateKey(d)] || []).length) return i;
   }
   return 99;
 }
@@ -935,7 +942,7 @@ function habitTipText(){
 
 function updateStreak(){
   const all = LS.get('history', {});
-  const key = d => d.toISOString().slice(0,10);
+  const key = d => localDateKey(d);
 
   let cur = 0; let cursor = new Date();
   if(!(all[key(cursor)]?.length)) cursor.setDate(cursor.getDate() - 1);
@@ -1062,7 +1069,7 @@ function renderProgress(){
   for(let p=0;p<first.getDay();p++) c+='<div></div>';
   for(let i=27;i>=0;i--){
     const d = new Date(); d.setDate(d.getDate()-i);
-    const k = d.toISOString().slice(0,10);
+    const k = localDateKey(d);
     const dayDone = all[k] || [];
     const cnt = dayDone.length;
     let cls = cnt > 0 ? 'part' : '';
@@ -1102,15 +1109,6 @@ function renderNightBanner(){
     </ul>
     <div class="dash-actions"><button class="btn" id="nightPrepared">${h.soakSeeds && h.soakWater ? '✓ Prepared' : 'Mark Prepared'}</button></div>
   </div>`;
-  el.querySelectorAll('[data-night]').forEach(ck=>{
-    ck.addEventListener('click', ()=>{
-      const k = ck.dataset.night;
-      const cur = getDailyHealth();
-      setDailyHealth({ [k]: !cur[k] });
-    });
-  });
-  const btn = document.getElementById('nightPrepared');
-  if(btn) btn.addEventListener('click', ()=> setDailyHealth({ soakSeeds:true, soakWater:true }));
 }
 
 function renderHome(){
@@ -1147,10 +1145,10 @@ function renderHome(){
       <div class="dc-head"><div><div class="dc-title">1️⃣ Drink Soaked Water</div>
         <div class="dc-sub">${soak.icon} ${soak.name}</div></div>
         <span class="dc-num" data-soak="${soak.id}" style="cursor:pointer">ℹ️</span></div>
-      <div style="font-size:.78rem;font-weight:700;color:var(--muted);margin-bottom:6px">Tonight</div>
+      <div style="font-size:.78rem;font-weight:700;color:var(--muted);margin-bottom:6px">Last night</div>
       <ul class="dash-list">
-        <li><span class="ck ${prep.soakSeeds?'on':'todo'}">${prep.soakSeeds?'✓':''}</span> ${soak.quantity}</li>
-        <li><span class="ck ${prep.soakWater?'on':'todo'}">${prep.soakWater?'✓':''}</span> ${soak.water}</li>
+        <li><span class="ck ${prep.soakSeeds?'on':'todo'}" data-prep="soakSeeds">${prep.soakSeeds?'✓':''}</span> ${soak.quantity}</li>
+        <li><span class="ck ${prep.soakWater?'on':'todo'}" data-prep="soakWater">${prep.soakWater?'✓':''}</span> ${soak.water}</li>
       </ul>
       <div style="font-size:.78rem;font-weight:700;color:var(--muted);margin:10px 0 6px">Morning</div>
       <ul class="dash-list">
@@ -1193,39 +1191,66 @@ function renderHome(){
         </div></div>
     </div>`;
 
-  dash.querySelector('[data-soak]')?.addEventListener('click', ()=> openSoakModal(soak.id));
-  dash.querySelectorAll('[data-h]').forEach(ck=>{
-    ck.addEventListener('click', ()=>{
-      const k = ck.dataset.h;
-      const cur = getDailyHealth();
-      setDailyHealth({ [k]: !cur[k] });
-    });
-  });
-  document.getElementById('markSoakDone')?.addEventListener('click', ()=> setDailyHealth({ drinkWater:true, eatSeeds:true }));
-  dash.querySelectorAll('[data-mob]').forEach(ck=>{
-    ck.addEventListener('click', ()=> toggleDone(ck.dataset.mob));
-  });
-  dash.querySelectorAll('[data-water]').forEach(b=>{
-    b.addEventListener('click', ()=>{
-      const delta = parseFloat(b.dataset.water);
-      const cur = getDailyHealth();
-      setDailyHealth({ waterLiters: Math.max(0, Math.round((cur.waterLiters + delta) * 4) / 4) });
-    });
-  });
-  dash.querySelectorAll('.mood-pick').forEach(row=>{
+}
+
+function handleHomeDashboardClick(e){
+  const prep = e.target.closest('[data-prep]');
+  if(prep){
+    const k = prep.dataset.prep;
+    const yKey = yesterdayKey();
+    const cur = getDailyHealth(yKey);
+    setDailyHealth({ [k]: !cur[k] }, yKey);
+    return;
+  }
+  const hck = e.target.closest('[data-h]');
+  if(hck){
+    const k = hck.dataset.h;
+    const cur = getDailyHealth();
+    setDailyHealth({ [k]: !cur[k] });
+    return;
+  }
+  const mob = e.target.closest('[data-mob]');
+  if(mob){ toggleDone(mob.dataset.mob); return; }
+  const water = e.target.closest('[data-water]');
+  if(water){
+    const delta = parseFloat(water.dataset.water);
+    const cur = getDailyHealth();
+    setDailyHealth({ waterLiters: Math.max(0, Math.round((cur.waterLiters + delta) * 4) / 4) });
+    return;
+  }
+  const mood = e.target.closest('.mood-pick button');
+  if(mood){
+    const row = mood.closest('.mood-pick');
     const field = row.dataset.mood;
-    row.querySelectorAll('button').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        const cur = getDailyHealth();
-        const v = btn.dataset.v;
-        setDailyHealth({ [field]: cur[field] === v ? null : v });
-      });
-    });
-  });
-  document.getElementById('homeStartRoutine')?.addEventListener('click', ()=>{
+    const cur = getDailyHealth();
+    const v = mood.dataset.v;
+    setDailyHealth({ [field]: cur[field] === v ? null : v });
+    return;
+  }
+  if(e.target.closest('#markSoakDone')){
+    setDailyHealth({ drinkWater:true, eatSeeds:true });
+    return;
+  }
+  if(e.target.closest('#homeStartRoutine')){
     goTab('routine');
     setTimeout(resumeSmart, 200);
-  });
+    return;
+  }
+  const soakInfo = e.target.closest('[data-soak]');
+  if(soakInfo) openSoakModal(soakInfo.dataset.soak);
+}
+
+function handleNightBannerClick(e){
+  const night = e.target.closest('[data-night]');
+  if(night){
+    const k = night.dataset.night;
+    const cur = getDailyHealth();
+    setDailyHealth({ [k]: !cur[k] });
+    return;
+  }
+  if(e.target.closest('#nightPrepared')){
+    setDailyHealth({ soakSeeds:true, soakWater:true });
+  }
 }
 
 function renderProgressTrends(){
@@ -1914,6 +1939,9 @@ applyTheme();
 if(window.matchMedia){
   window.matchMedia('(prefers-color-scheme: light)').addEventListener?.('change', ()=>{ if(!settings.theme) applyTheme(); });
 }
+document.getElementById('homeDashboard')?.addEventListener('click', handleHomeDashboardClick);
+document.getElementById('nightBanner')?.addEventListener('click', handleNightBannerClick);
+
 updateStreak();
 updateHealthStreak();
 syncSettingsUI();

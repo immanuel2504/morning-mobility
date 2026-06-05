@@ -1,5 +1,5 @@
-/* Morning Mobility service worker — offline support */
-const CACHE = 'morning-mobility-v1';
+/* Morning Health service worker — offline support */
+const CACHE = 'morning-health-v2';
 const ASSETS = [
   './',
   './index.html',
@@ -24,10 +24,24 @@ self.addEventListener('fetch', (e) => {
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
 
-  // Don't cache cross-origin requests (fonts, YouTube, etc.) — just pass through.
   if (url.origin !== self.location.origin) return;
 
-  // Cache-first for same-origin app assets, with network fallback that updates the cache.
+  const isAppShell = url.pathname.endsWith('index.html') || url.pathname.endsWith('/');
+
+  // Always fetch fresh HTML so mark/check fixes reach installed PWAs.
+  if (isAppShell) {
+    e.respondWith(
+      fetch(req).then((res) => {
+        if (res && res.status === 200) {
+          const copy = res.clone();
+          caches.open(CACHE).then((c) => c.put(req, copy));
+        }
+        return res;
+      }).catch(() => caches.match(req))
+    );
+    return;
+  }
+
   e.respondWith(
     caches.match(req).then((cached) => {
       const network = fetch(req).then((res) => {
