@@ -258,6 +258,9 @@
   .ring .time { font-size: 3.2rem; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing:-.02em; }
   .ring .state { color: var(--muted); font-size:.85rem; margin-top:2px; font-weight:600; }
   .ring.warn .prog { stroke: var(--warn); }
+  .ring.breath-in .prog { stroke: var(--brand); transition: stroke-dashoffset .3s linear, stroke .6s ease; }
+  .ring.breath-out .prog { stroke: #818cf8; transition: stroke-dashoffset .3s linear, stroke .6s ease; }
+  .ring.breath-in .state, .ring.breath-out .state { font-weight: 600; letter-spacing: .02em; }
 
   .reps-box { display:grid; place-items:center; margin: 6px 0 18px; }
   .reps-num { font-size: 4.8rem; font-weight: 800; line-height:1; font-variant-numeric: tabular-nums; letter-spacing:-.03em; }
@@ -267,6 +270,15 @@
     background: var(--surface-2); border:1px solid var(--border); color:var(--text); transition: transform .14s var(--ease); }
   .rep-btn:active { transform: scale(.9); }
   .rep-btn.plus { background: linear-gradient(135deg, var(--brand), var(--brand-2)); color:var(--brand-ink); border:none; box-shadow: var(--shadow-brand); }
+  .breath-badge { display:none; text-align:center; margin: 0 auto 16px; padding: 10px 20px; border-radius: 999px;
+    width: fit-content;
+    font-size: .9rem; font-weight: 600; letter-spacing: .02em; border: 1px solid var(--border); background: var(--surface);
+    transition: color .5s ease, border-color .5s ease, background .5s ease; max-width: 280px; }
+  .breath-badge.on { display:block; }
+  .breath-badge.in { color: var(--brand); border-color: color-mix(in srgb, var(--brand) 45%, var(--border));
+    background: color-mix(in srgb, var(--brand) 8%, var(--surface)); }
+  .breath-badge.out { color: #818cf8; border-color: color-mix(in srgb, #818cf8 45%, var(--border));
+    background: color-mix(in srgb, #818cf8 8%, var(--surface)); }
 
   /* Demo media */
   .media-frame { position:relative; width:100%; aspect-ratio:16/10; background:var(--surface-2);
@@ -463,6 +475,10 @@
       <label class="switch"><input type="checkbox" id="setVoice"><span class="slider"></span></label>
     </div>
     <div class="opt">
+      <div class="l">🫁 Breath guide<small>Inhale & exhale on every exercise (auto-starts)</small></div>
+      <label class="switch"><input type="checkbox" id="setBreath"><span class="slider"></span></label>
+    </div>
+    <div class="opt">
       <div class="l">⏩ Auto-advance<small>Move to next exercise automatically after rest</small></div>
       <label class="switch"><input type="checkbox" id="setAuto"><span class="slider"></span></label>
     </div>
@@ -496,94 +512,100 @@
 const EXERCISES = [
   { id:'belly', phase:'Phase 1 · Relaxation', name:'Belly Breathing', icon:'🫁',
     type:'timed', duration:300, prescr:'5 minutes',
+    breath:{ inhale:4, exhale:7 },
     steps:['Lie on your back','One hand on chest, one on stomach','Inhale 4 seconds','Exhale 6–8 seconds'],
     focus:['Relax pelvic floor','Reduce tension','Relax neck & shoulders'] },
   { id:'towel', phase:'Phase 1 · Relaxation', name:'Warm Towel (Optional)', icon:'🧖',
     type:'timed', duration:600, prescr:'10 minutes · optional', optional:true,
+    breath:{ inhale:4, exhale:7 },
     steps:['Apply warm towel to buttocks','Apply to pelvic / perineal area'],
     focus:['Relaxation','Increase blood flow'] },
 
   { id:'chintuck', phase:'Phase 2 · Neck & Spine', name:'Chin Tucks', icon:'🙆',
     type:'reps', reps:10, sets:1, holdSec:5, prescr:'10 reps · hold 5 sec',
+    breath:{ inhale:3, exhale:5 },
     steps:['Gently draw chin straight back ("double chin")','Hold 5 seconds','Keep eyes level'],
     focus:['Neck alignment','Reduce forward head posture'] },
   { id:'catcow', phase:'Phase 2 · Neck & Spine', name:'Cat-Cow', icon:'🐈',
-    type:'reps', reps:10, sets:1, prescr:'10 slow reps',
+    type:'reps', reps:10, sets:1, prescr:'10 slow reps', breath:{ inhale:4, exhale:4 },
     steps:['On hands & knees','Arch back & look up (cow)','Round back & tuck chin (cat)','Move slowly with breath'],
     focus:['Spine mobility','Release tension'] },
   { id:'thread', phase:'Phase 2 · Neck & Spine', name:'Thread the Needle', icon:'🧵',
     type:'timed', duration:25, sides:true, rounds:2, prescr:'2 rounds · 20–30 sec each side',
+    breath:{ inhale:4, exhale:5 },
     steps:['From hands & knees, slide one arm under the other','Rest shoulder & ear on floor','Feel the stretch through upper back'],
     focus:['Thoracic rotation','Shoulder blade release'] },
 
   { id:'child', phase:'Phase 3 · Upper Back', name:"Child's Pose", icon:'🧎',
-    type:'timed', duration:60, prescr:'1 minute',
+    type:'timed', duration:60, prescr:'1 minute', breath:{ inhale:4, exhale:6 },
     steps:['Kneel and sit back on heels','Reach arms forward','Relax chest toward floor'],
     focus:['Lengthen spine','Relax shoulders'] },
   { id:'childside', phase:'Phase 3 · Upper Back', name:"Child's Pose Side Reach", icon:'🤸',
     type:'timed', duration:25, sides:true, rounds:2, prescr:'2 rounds · 20–30 sec each side',
+    breath:{ inhale:4, exhale:5 },
     steps:["From child's pose, walk both hands to one side","Feel stretch along the side body","Keep hips back toward heels"],
     focus:['Lateral (side) stretch','Lat & shoulder release'] },
   { id:'happybaby', phase:'Phase 3 · Upper Back', name:'Happy Baby Pose', icon:'👶',
-    type:'timed', duration:45, rounds:2, prescr:'2 rounds · 30–60 sec hold',
+    type:'timed', duration:45, rounds:2, prescr:'2 rounds · 30–60 sec hold', breath:{ inhale:4, exhale:5 },
     steps:['Lie on back','Bend knees toward chest','Hold outside of feet','Gently rock side to side'],
     focus:['Hip & lower back release','Pelvic floor relaxation'] },
   { id:'doorway', phase:'Phase 3 · Upper Back', name:'Doorway Chest Stretch', icon:'🚪',
-    type:'timed', duration:30, rounds:2, prescr:'2 rounds · 30 sec hold',
+    type:'timed', duration:30, rounds:2, prescr:'2 rounds · 30 sec hold', breath:{ inhale:4, exhale:5 },
     steps:['Place forearms on a doorframe','Step one foot through','Lean gently forward'],
     focus:['Open chest','Counter rounded shoulders'] },
   { id:'thoracicext', phase:'Phase 3 · Upper Back', name:'Thoracic Extension on Chair', icon:'🪑',
-    type:'reps', reps:10, sets:1, prescr:'10 reps',
+    type:'reps', reps:10, sets:1, prescr:'10 reps', breath:{ inhale:4, exhale:4 },
     steps:['Sit on a chair','Place hands behind head','Gently arch upper back over chair top','Return slowly'],
     focus:['Reverse hunching','Mid-back mobility'] },
 
   { id:'wallslide', phase:'Phase 4 · Scapular Control', name:'Wall Slides', icon:'🧱',
-    type:'reps', reps:5, sets:2, prescr:'5 reps × 2 sets',
+    type:'reps', reps:5, sets:2, prescr:'5 reps × 2 sets', breath:{ inhale:4, exhale:4 },
     steps:['Back against wall','Arms in "goal post" against wall','Slide arms up & down slowly'],
     focus:['No shrugging','No lower back arch'] },
   { id:'scapretract', phase:'Phase 4 · Scapular Control', name:'Scapular Retraction', icon:'🎯',
     type:'reps', reps:10, sets:1, holdSec:5, prescr:'10 reps · hold 5 sec',
+    breath:{ inhale:3, exhale:5 },
     steps:['Pull shoulder blades back','...and gently down','Hold 5 seconds, release'],
     focus:['Activate mid-back','Improve posture'] },
 
   { id:'deadhang', phase:'Phase 5 · Hanging', name:'Dead Hang', icon:'🧗',
-    type:'timed', duration:15, rounds:3, prescr:'3 rounds · 10–20 sec',
+    type:'timed', duration:15, rounds:3, prescr:'3 rounds · 10–20 sec', breath:{ inhale:4, exhale:5 },
     steps:['Hang from a bar','Use feet support if needed','Relax shoulders & breathe'],
     focus:['Shoulder decompression','Spine decompression','Grip strength'] },
   { id:'scappullup', phase:'Phase 5 · Hanging', name:'Scapular Pull-Ups', icon:'💪',
-    type:'reps', reps:6, sets:1, prescr:'5–8 reps',
+    type:'reps', reps:6, sets:1, prescr:'5–8 reps', breath:{ inhale:4, exhale:4 },
     steps:['Hang from bar','Pull shoulder blades down (small movement)','Do NOT bend elbows'],
     focus:['Scapular strength','Pull-up preparation'] },
 
   { id:'incline', phase:'Phase 6 · Push-Up', name:'Incline Push-Ups', icon:'🛏️',
-    type:'reps', reps:9, sets:2, prescr:'8–10 reps × 2 sets',
+    type:'reps', reps:9, sets:2, prescr:'8–10 reps × 2 sets', breath:{ inhale:4, exhale:4 },
     steps:['Hands on table / bench / bed edge','Lower with control','At top: push slightly extra (serratus)'],
     focus:['Neck neutral','Core tight'] },
 
   { id:'calfstraight', phase:'Phase 7 · Lower Body', name:'Straight Knee Calf Stretch', icon:'🦵',
-    type:'timed', duration:45, sides:true, prescr:'45 sec each side',
+    type:'timed', duration:45, sides:true, prescr:'45 sec each side', breath:{ inhale:4, exhale:5 },
     steps:['Hands on wall','Back leg straight, heel down','Lean forward'],
     focus:['Upper calf (gastrocnemius)'] },
   { id:'calfbent', phase:'Phase 7 · Lower Body', name:'Bent Knee Calf Stretch', icon:'🦿',
-    type:'timed', duration:45, sides:true, prescr:'45 sec each side',
+    type:'timed', duration:45, sides:true, prescr:'45 sec each side', breath:{ inhale:4, exhale:5 },
     steps:['Same position as before','Bend the back knee slightly','Keep heel down'],
     focus:['Lower calf (soleus)'] },
   { id:'kneewall', phase:'Phase 7 · Lower Body', name:'Knee-to-Wall Ankle Drill', icon:'📏',
-    type:'reps', reps:10, sets:1, sides:true, prescr:'10 reps each side',
+    type:'reps', reps:10, sets:1, sides:true, prescr:'10 reps each side', breath:{ inhale:4, exhale:4 },
     steps:['Foot a few inches from wall','Drive knee toward wall over toes','Keep heel down'],
     focus:['Ankle dorsiflexion mobility'] },
   { id:'squat', phase:'Phase 7 · Lower Body', name:'Supported Deep Squat Hold', icon:'🧘',
-    type:'timed', duration:25, rounds:2, prescr:'2 rounds · 20–30 sec hold',
+    type:'timed', duration:25, rounds:2, prescr:'2 rounds · 20–30 sec hold', breath:{ inhale:4, exhale:5 },
     steps:['Hold a support if needed','Sink into a deep squat','Keep heels down, chest up'],
     focus:['Hip & ankle mobility'] },
 
   { id:'mountain', phase:'Phase 8 · Posture Reset', name:'Mountain Pose', icon:'⛰️',
-    type:'timed', duration:60, prescr:'1 minute',
+    type:'timed', duration:60, prescr:'1 minute', breath:{ inhale:4, exhale:7 },
     steps:['Stand tall','Chin neutral, chest open','Shoulders relaxed','Slow breathing'],
     focus:['Reset posture','Calm nervous system'] },
 
   { id:'walk', phase:'Phase 9 · Walking', name:'Walk', icon:'🚶',
-    type:'timed', duration:1200, prescr:'20–30 minutes · comfortable pace',
+    type:'timed', duration:1200, prescr:'20–30 minutes · comfortable pace', breath:{ inhale:4, exhale:4 },
     steps:['Walk at a comfortable pace'],
     focus:['Blood flow','Pelvic floor relaxation','Recovery','Reduced stiffness'] },
 ];
@@ -601,7 +623,7 @@ const LS = {
   set(k, v){ localStorage.setItem(k, JSON.stringify(v)); }
 };
 
-const defSettings = { sound:true, voice:true, autoAdvance:true, wake:true, essential:false, restSec:15, theme:null };
+const defSettings = { sound:true, voice:true, breathGuide:true, autoAdvance:true, wake:true, essential:false, restSec:15, theme:null };
 let settings = Object.assign({}, defSettings, LS.get('settings', {}));
 function saveSettings(){ LS.set('settings', settings); }
 
@@ -765,6 +787,160 @@ function say(text){
     speechSynthesis.cancel(); speechSynthesis.speak(u);
   }catch(e){}
 }
+function sayBreath(text){
+  if(!settings.voice) return;
+  try{
+    if(!('speechSynthesis' in window)) return;
+    const u=new SpeechSynthesisUtterance(text); u.rate=0.92; u.pitch=1;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+
+/* Soft inhale / exhale whoosh — every exercise */
+let breathTimer = null;
+let breathScheduleId = null;
+let breathPhase = 'in';
+let breathLeft = 0;
+let breathExId = null;
+
+function getBreathPattern(ex){
+  if(!ex || ex.breath === false) return null;
+  return ex.breath || null;
+}
+
+function unlockAudio(){
+  try{
+    audioCtx = audioCtx || new (window.AudioContext||window.webkitAudioContext)();
+    if(audioCtx.state === 'suspended') audioCtx.resume();
+  }catch(e){}
+}
+
+function pauseBreathGuide(){
+  if(breathTimer){ clearInterval(breathTimer); breathTimer = null; }
+}
+
+function stopBreathGuide(){
+  if(breathScheduleId){ clearTimeout(breathScheduleId); breathScheduleId = null; }
+  pauseBreathGuide();
+  breathExId = null;
+  const ring = document.getElementById('ring');
+  if(ring){ ring.classList.remove('breath-in','breath-out'); }
+  const badge = document.getElementById('breathBadge');
+  if(badge){ badge.classList.remove('on','in','out'); }
+}
+
+function playBreathSound(type, duration){
+  if(!settings.breathGuide) return;
+  unlockAudio();
+  try{
+    if(!audioCtx) return;
+    const len = Math.ceil(audioCtx.sampleRate * duration);
+    const buffer = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    let b0=0, b1=0, b2=0;
+    for(let i=0; i<len; i++){
+      const white = Math.random() * 2 - 1;
+      b0 = 0.99886*b0 + white*0.0555179;
+      b1 = 0.99332*b1 + white*0.0750759;
+      b2 = 0.96900*b2 + white*0.1538520;
+      data[i] = (b0 + b1 + b2 + white*0.5362) * 0.1;
+    }
+    const src = audioCtx.createBufferSource();
+    src.buffer = buffer;
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.Q.value = 0.7;
+    const gain = audioCtx.createGain();
+    src.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination);
+    const now = audioCtx.currentTime;
+    const d = Math.max(0.5, duration);
+    if(type === 'in'){
+      filter.frequency.setValueAtTime(380, now);
+      filter.frequency.exponentialRampToValueAtTime(1400, now + d * 0.85);
+      gain.gain.setValueAtTime(0.001, now);
+      gain.gain.exponentialRampToValueAtTime(0.32, now + d * 0.3);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + d);
+    } else {
+      filter.frequency.setValueAtTime(1000, now);
+      filter.frequency.exponentialRampToValueAtTime(320, now + d * 0.85);
+      gain.gain.setValueAtTime(0.001, now);
+      gain.gain.exponentialRampToValueAtTime(0.28, now + d * 0.18);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + d);
+    }
+    src.start(now);
+    src.stop(now + d + 0.05);
+  }catch(e){}
+}
+
+function updateBreathUI(){
+  const text = breathPhase === 'in' ? `Breathe in · ${breathLeft}s` : `Breathe out · ${breathLeft}s`;
+  const st = document.getElementById('ringState');
+  const lbl = document.getElementById('breathLabel');
+  const badge = document.getElementById('breathBadge');
+  const ring = document.getElementById('ring');
+  if(st) st.textContent = text;
+  if(lbl) lbl.textContent = text;
+  if(badge){
+    badge.classList.add('on');
+    badge.classList.toggle('in', breathPhase === 'in');
+    badge.classList.toggle('out', breathPhase === 'out');
+  }
+  if(ring){
+    ring.classList.toggle('breath-in', breathPhase === 'in');
+    ring.classList.toggle('breath-out', breathPhase === 'out');
+  }
+}
+
+function breathTick(ex){
+  const pattern = getBreathPattern(ex);
+  if(!pattern) return;
+  const { inhale, exhale } = pattern;
+  breathLeft--;
+  if(breathLeft > 0){ updateBreathUI(); return; }
+  if(breathPhase === 'in'){
+    breathPhase = 'out'; breathLeft = exhale;
+    playBreathSound('out', exhale);
+    if(settings.voice) sayBreath('Breathe out');
+  } else {
+    breathPhase = 'in'; breathLeft = inhale;
+    playBreathSound('in', inhale);
+    if(settings.voice) sayBreath('Breathe in');
+  }
+  updateBreathUI();
+}
+
+function startBreathGuide(ex, resume){
+  const pattern = getBreathPattern(ex);
+  if(!pattern || !settings.breathGuide) return;
+  const { inhale, exhale } = pattern;
+  if(breathTimer && breathExId === ex.id) return;
+  pauseBreathGuide();
+  breathExId = ex.id;
+  if(!resume){
+    breathPhase = 'in'; breathLeft = inhale;
+    playBreathSound('in', inhale);
+    if(settings.voice) sayBreath('Breathe in');
+  }
+  updateBreathUI();
+  breathTimer = setInterval(()=> breathTick(ex), 1000);
+}
+
+function scheduleBreathStart(ex){
+  if(breathScheduleId) clearTimeout(breathScheduleId);
+  if(!getBreathPattern(ex) || !settings.breathGuide) return;
+  if(breathTimer && breathExId === ex.id){ updateBreathUI(); return; }
+  breathScheduleId = setTimeout(()=>{
+    breathScheduleId = null;
+    if(player.classList.contains('open') && mode==='exercise' && flow[pIdx]===ex)
+      startBreathGuide(ex, false);
+  }, 400);
+}
+
+function ensureBreathOnTap(ex){
+  unlockAudio();
+  if(getBreathPattern(ex) && settings.breathGuide && !breathTimer)
+    startBreathGuide(ex, false);
+}
 
 let wakeLock=null;
 async function requestWake(){
@@ -813,11 +989,12 @@ function openSingle(id){ flow = EXERCISES; guided = false; pIdx = EXERCISES.find
 function openCommon(){
   phase = 0; remaining = 0; mode='exercise';
   player.classList.add('open');
+  unlockAudio();
   requestWake();
   renderPlayer();
 }
 function closePlayer(){
-  stopTimer(); if(restTimer) clearInterval(restTimer);
+  stopTimer(); stopBreathGuide(); if(restTimer) clearInterval(restTimer);
   try{ speechSynthesis.cancel(); }catch(e){}
   releaseWake();
   player.classList.remove('open');
@@ -841,13 +1018,15 @@ function renderPlayer(){
     if(seg.label) body+=`<div class="p-side-badge">${seg.label} · segment ${phase+1}/${segs.length}</div>`;
     remaining = remaining>0 ? remaining : seg.dur;
     body+=ringHTML(remaining, seg.dur);
+    body+=`<div class="breath-badge" id="breathBadge"><span id="breathLabel">Breathe in</span></div>`;
   } else {
     const totalSets = ex.sets||1;
     const sideTxt = ex.sides ? ' (each side)' : '';
-    body+=`<div class="reps-box">
+    body+=`<div class="breath-badge" id="breathBadge"><span id="breathLabel">Breathe in</span></div>
+      <div class="reps-box">
       <div class="reps-num" id="repNum">0</div>
       <div class="reps-of">of ${ex.reps} reps${sideTxt}${totalSets>1?` · set <span id="setNum">1</span>/${totalSets}`:''}</div>
-      ${ex.holdSec?`<div class="reps-of">hold each ${ex.holdSec}s</div>`:''}
+      ${ex.holdSec?`<div class="reps-of">hold each ${ex.holdSec}s · exhale on hold</div>`:''}
       <div class="rep-controls">
         <button class="rep-btn" id="repMinus">−</button>
         <button class="rep-btn plus" id="repPlus">+1</button>
@@ -866,6 +1045,7 @@ function renderPlayer(){
   document.getElementById('pNext').textContent = pIdx===flow.length-1 ? 'Finish ✓' : 'Done ›';
 
   if(ex.type==='reps') say(ex.name + (ex.sides?', each side':''));
+  scheduleBreathStart(ex);
 }
 
 /* Demo media: shows media/<id>.(png|jpg|webp) image if present, else .mp4/.gif, else a hint + YouTube search.
@@ -930,15 +1110,23 @@ function setRing(rem,total){
 }
 function wireTimer(){
   const btn=document.getElementById('timerBtn');
-  btn.addEventListener('click', ()=> running ? pauseTimer() : startTimer());
+  btn.addEventListener('click', ()=>{
+    ensureBreathOnTap(flow[pIdx]);
+    running ? pauseTimer() : startTimer(remaining > 0 && remaining < (segments(flow[pIdx])[phase]?.dur || 0));
+  });
 }
-function startTimer(){
+function startTimer(resume){
   const ex=flow[pIdx]; const segs=segments(ex); const seg=segs[phase];
   if(remaining<=0) remaining=seg.dur;
   running=true;
   const btn=document.getElementById('timerBtn'); if(btn) btn.textContent='⏸ Pause';
-  const st=document.getElementById('ringState'); if(st) st.textContent='In progress…';
-  if(seg.label) say(seg.label); else say(ex.name);
+  if(getBreathPattern(ex) && settings.breathGuide){
+    if(!breathTimer) startBreathGuide(ex, resume);
+    else updateBreathUI();
+  } else {
+    const st=document.getElementById('ringState'); if(st) st.textContent='In progress…';
+    if(seg.label) say(seg.label); else say(ex.name);
+  }
   timer=setInterval(()=>{
     remaining--;
     setRing(remaining, seg.dur);
@@ -949,6 +1137,7 @@ function startTimer(){
         phase++; remaining=0; renderPlayer();
         setTimeout(()=>{ if(player.classList.contains('open') && mode==='exercise') startTimer(); }, 700);
       } else {
+        stopBreathGuide();
         const stt=document.getElementById('ringState'); if(stt) stt.textContent='Complete ✓';
         const b=document.getElementById('timerBtn'); if(b) b.textContent='✓ Done';
         markDone(ex.id); say('Done');
@@ -959,16 +1148,18 @@ function startTimer(){
 }
 function pauseTimer(){
   running=false; clearInterval(timer);
+  pauseBreathGuide();
   const btn=document.getElementById('timerBtn'); if(btn) btn.textContent='▶ Resume';
   const st=document.getElementById('ringState'); if(st) st.textContent='Paused';
 }
-function stopTimer(){ running=false; if(timer) clearInterval(timer); remaining=0; phase=0; }
+function stopTimer(){ running=false; if(timer) clearInterval(timer); stopBreathGuide(); remaining=0; phase=0; }
 
 function wireReps(ex){
   let count=0, set=1;
   const numEl=document.getElementById('repNum');
   const setEl=document.getElementById('setNum');
   document.getElementById('repPlus').addEventListener('click', ()=>{
+    ensureBreathOnTap(ex);
     count++; beep(700,.08,.15); vibrate(30);
     if(count>=ex.reps){
       if((ex.sets||1)>set){ set++; count=0; if(setEl) setEl.textContent=set; beep(880,.25,.25); say('Next set'); }
@@ -983,7 +1174,7 @@ function wireReps(ex){
 }
 
 function advance(){
-  stopTimer();
+  stopTimer(); stopBreathGuide();
   if(pIdx >= flow.length-1){ renderComplete(); return; }
   if(guided && settings.restSec>0){ renderRest(); }
   else { pIdx++; renderPlayer(); }
@@ -1040,10 +1231,10 @@ function renderComplete(){
 
 /* player controls */
 document.getElementById('pClose').addEventListener('click', closePlayer);
-document.getElementById('pPrev').addEventListener('click', ()=>{ stopTimer(); if(pIdx>0){ pIdx--; renderPlayer(); } });
+document.getElementById('pPrev').addEventListener('click', ()=>{ stopTimer(); stopBreathGuide(); if(pIdx>0){ pIdx--; renderPlayer(); } });
 document.getElementById('pNext').addEventListener('click', ()=>{ markDone(flow[pIdx].id); advance(); });
 document.getElementById('pSkip').addEventListener('click', ()=>{
-  stopTimer(); if(restTimer) clearInterval(restTimer);
+  stopTimer(); stopBreathGuide(); if(restTimer) clearInterval(restTimer);
   if(pIdx<flow.length-1){ pIdx++; renderPlayer(); } else renderComplete();
 });
 document.getElementById('startBtn').addEventListener('click', openGuided);
@@ -1058,6 +1249,7 @@ function syncSettingsUI(){
   document.getElementById('setLight').checked = currentTheme()==='light';
   document.getElementById('setSound').checked=settings.sound;
   document.getElementById('setVoice').checked=settings.voice;
+  document.getElementById('setBreath').checked=settings.breathGuide;
   document.getElementById('setAuto').checked=settings.autoAdvance;
   document.getElementById('setWake').checked=settings.wake;
   document.getElementById('setEssential').checked=settings.essential;
@@ -1072,6 +1264,7 @@ function bindToggle(id, key, after){
 document.getElementById('setLight').addEventListener('change', e=>{ settings.theme = e.target.checked ? 'light':'dark'; saveSettings(); applyTheme(); });
 bindToggle('setSound','sound');
 bindToggle('setVoice','voice');
+bindToggle('setBreath','breathGuide');
 bindToggle('setAuto','autoAdvance');
 bindToggle('setWake','wake', ()=>{ settings.wake ? requestWake() : releaseWake(); });
 bindToggle('setEssential','essential', renderAll);
