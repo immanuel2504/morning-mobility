@@ -1,7 +1,7 @@
 {
   "name": "Morning Health — Daily Coach",
   "short_name": "Morning Health",
-  "description": "Daily soaked seeds, mobility routine, water tracking, and gut health coach.",
+  "description": "Daily soaked seeds, mobility, water tracking, gut health, and glowing skin routine.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

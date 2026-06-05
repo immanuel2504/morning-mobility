@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
 <meta name="theme-color" content="#0a0f1d" />
-<meta name="description" content="Morning Health — daily soaked seeds, mobility routine, water tracking, and gut health coach." />
+<meta name="description" content="Morning Health — soaked seeds, mobility, water tracking, gut health, and glowing skin routine." />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="Morning Health" />
@@ -226,6 +226,12 @@
   .info-block ul { margin:0; padding-left:18px; }
   .info-block li { margin:4px 0; font-size:.88rem; }
   .info-block p { margin:0; font-size:.88rem; line-height:1.5; color:var(--text); }
+  .skin-score-pill { display:inline-flex; align-items:center; gap:6px; font-size:.78rem; font-weight:700;
+    color:var(--brand); background:color-mix(in srgb, var(--brand) 10%, var(--surface-2));
+    border:1px solid color-mix(in srgb, var(--brand) 28%, var(--border)); border-radius:999px; padding:4px 10px; }
+  .skin-section { font-size:.74rem; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:.7px; margin:10px 0 6px; }
+  .skin-section:first-of-type { margin-top:0; }
+  .dash-list .ck.auto { border-color:color-mix(in srgb, var(--good) 50%, var(--border)); opacity:.95; }
   /* ---------- Buttons ---------- */
   .btn { border:none; border-radius:14px; padding:14px 18px; font-size:1rem; font-weight:700; cursor:pointer;
     color: var(--brand-ink); background: linear-gradient(135deg, var(--brand), var(--brand-2));
@@ -526,8 +532,12 @@
   <!-- LEARN TAB -->
   <section id="tab-learn">
     <h2 class="sec-title">📚 Learn</h2>
-    <p class="hint">Tap any seed to see preparation, benefits, and precautions.</p>
+    <p class="hint">Tap any card for preparation, benefits, and science-backed tips.</p>
+    <h3 class="sec-title" style="font-size:.95rem;margin-top:0">🌱 Soaked Seeds</h3>
     <div id="learnList"></div>
+    <h3 class="sec-title" style="font-size:.95rem;margin-top:22px">✨ Glowing Skin</h3>
+    <p class="hint" style="margin-top:-6px">Healthy skin starts inside your body and finishes with a gentle outside routine.</p>
+    <div id="skinLearnList"></div>
     <h2 class="sec-title" style="margin-top:22px">📅 Weekly Soak Calendar</h2>
     <div class="dash-card" id="soakCalendar"></div>
     <h2 class="sec-title" style="margin-top:22px">🗓️ Mobility Progression</h2>
@@ -805,6 +815,68 @@ const HOME_MOBILITY = [
 ];
 const MOOD_EMOJI = { good:'😊', ok:'😐', bad:'😣' };
 
+/* Simple inside + outside skin routine */
+const SKIN_STEPS = [
+  { id:'skinInsideHydrate', section:'inside', label:'Hydration on track', icon:'💧', auto:'water' },
+  { id:'skinInsideSeeds', section:'inside', label:'Morning seeds / antioxidants', icon:'🌱', auto:'seeds' },
+  { id:'skinInsideVitC', section:'inside', label:'Vitamin C food (citrus, amla, berries)', icon:'🍊' },
+  { id:'skinAmCleanse', section:'am', label:'Gentle cleanse', icon:'🫧' },
+  { id:'skinAmMoist', section:'am', label:'Moisturizer', icon:'🧴' },
+  { id:'skinAmSpf', section:'am', label:'SPF 30+ sunscreen', icon:'☀️' },
+  { id:'skinPmCleanse', section:'pm', label:'Night cleanse', icon:'🌙' },
+  { id:'skinPmMoist', section:'pm', label:'Night moisturizer', icon:'✨' }
+];
+const SKIN_LEARN = {
+  hydration: {
+    id:'hydration', name:'Hydration & Skin', icon:'💧',
+    tagline:'Plump, glowing skin starts with water',
+    inside:['Aim for 2–3 L daily','Skin loses glow when dehydrated','Pair with soaked seeds & fiber'],
+    outside:['Apply moisturizer on slightly damp skin','Use a humidifier if air is dry'],
+    science:'Skin is ~64% water. Mild dehydration can make skin look dull and emphasize fine lines. Drinking enough water supports dermal hydration alongside topical moisturizers.',
+    precautions:'Spread intake through the day. Very dry skin may also need ceramide-based moisturizer — water alone is not enough topically.'
+  },
+  gutskin: {
+    id:'gutskin', name:'Gut → Skin Connection', icon:'🦠',
+    tagline:'Clear gut, clearer complexion',
+    inside:['Daily soaked seeds rotation','Track bloating on Home screen','Fiber + water reduce inflammation'],
+    outside:['Avoid over-washing when gut is irritated','Skip harsh actives during flare-ups'],
+    science:'The gut-skin axis links digestive health to inflammation and breakouts. Soluble fiber, fermented foods, and steady blood sugar may support calmer skin over weeks.',
+    precautions:'Sudden breakouts with gut pain warrant a doctor visit. Diet changes work gradually — expect 4–8 weeks for visible change.'
+  },
+  antioxidants: {
+    id:'antioxidants', name:'Antioxidants', icon:'🍇',
+    tagline:'Fight dullness from within',
+    inside:['Soaked seeds & raisins','Vitamin C fruits','Colorful vegetables at lunch'],
+    outside:['Vitamin C serum (optional, PM)','Green tea rinse — patch test first'],
+    science:'Antioxidants neutralize free radicals from UV and pollution. Vitamin C supports collagen synthesis; seeds and berries provide polyphenols that complement topical care.',
+    precautions:'Introduce one new product at a time. Patch test serums behind the ear for 24 h.'
+  },
+  amroutine: {
+    id:'amroutine', name:'Morning Skin Routine', icon:'☀️',
+    tagline:'3 steps · under 3 minutes',
+    inside:['Drink soaked water first','Eat seeds before coffee'],
+    outside:['1. Splash lukewarm water or gentle cleanser','2. Pat dry · apply light moisturizer','3. SPF 30+ — non-negotiable even indoors near windows'],
+    science:'Morning SPF prevents photoaging — up to 80% of visible facial aging is UV-related. Moisturizer after cleansing restores the skin barrier.',
+    precautions:'If skin stings after cleansing, switch to a fragrance-free cream cleanser. Reapply SPF every 2–3 h if outdoors.'
+  },
+  pmroutine: {
+    id:'pmroutine', name:'Night Skin Routine', icon:'🌙',
+    tagline:'Repair while you sleep',
+    inside:['Light dinner · avoid heavy sugar late','Prepare tomorrow\'s soak at 9 PM'],
+    outside:['1. Remove sweat/SPF with gentle cleanser','2. Pat dry · apply richer night moisturizer','3. Sleep on a clean pillowcase'],
+    science:'Skin barrier repair peaks overnight. Removing SPF and pollutants prevents clogged pores; occlusive moisturizers reduce transepidermal water loss while you sleep.',
+    precautions:'Do not sleep in makeup or sunscreen. Change pillowcases every 2–3 days if acne-prone.'
+  },
+  lifestyle: {
+    id:'lifestyle', name:'Sleep & Stress', icon:'😴',
+    tagline:'The free glow boosters',
+    inside:['Target 7–8 h sleep','Morning mobility lowers cortisol','Walk after routine for circulation'],
+    outside:['Cool room for sleep','Brief walk = post-exercise glow'],
+    science:'Cortisol from poor sleep and stress can worsen acne and dullness. Sleep and moderate exercise improve circulation and lymphatic drainage — the "natural glow."',
+    precautions:'Chronic skin issues plus fatigue may need blood work (thyroid, iron, vitamin D).'
+  }
+};
+
 /* 5 core exercises (~15 min) — counts as a "habit day" even without the full routine */
 const MINIMUM_IDS = ['belly','chintuck','catcow','child','mountain'];
 
@@ -834,7 +906,39 @@ function todaySoak(){ return soakForDate(new Date()); }
 function getDailyHealth(key){
   const all = LS.get('dailyHealth', {});
   const k = key || todayKey();
-  return Object.assign({ soakSeeds:false, soakWater:false, drinkWater:false, eatSeeds:false, waterLiters:0, bloating:null, energy:null }, all[k] || {});
+  return Object.assign({
+    soakSeeds:false, soakWater:false, drinkWater:false, eatSeeds:false, waterLiters:0, bloating:null, energy:null,
+    skinInsideVitC:false, skinAmCleanse:false, skinAmMoist:false, skinAmSpf:false, skinPmCleanse:false, skinPmMoist:false
+  }, all[k] || {});
+}
+function skinHydrationMet(h){
+  const goal = settings.waterGoal || 3;
+  return (h.waterLiters || 0) >= Math.min(2, goal * 0.65);
+}
+function skinStepDone(h, step){
+  if(step.auto === 'water') return skinHydrationMet(h);
+  if(step.auto === 'seeds') return !!h.eatSeeds;
+  return !!h[step.id];
+}
+function skinScore(h){
+  h = h || getDailyHealth();
+  return SKIN_STEPS.filter(s => skinStepDone(h, s)).length;
+}
+function renderSkinChecklist(h){
+  const groups = [
+    { title:'Inside · nourish', key:'inside' },
+    { title:'Outside · morning', key:'am' },
+    { title:'Outside · night', key:'pm' }
+  ];
+  return groups.map(g=>{
+    const items = SKIN_STEPS.filter(s => s.section === g.key).map(s=>{
+      const on = skinStepDone(h, s);
+      const auto = s.auto ? ' auto' : '';
+      const attrs = s.auto ? '' : ` data-skin="${s.id}"`;
+      return `<li><span class="ck ${on?'on':'todo'}${auto}"${attrs}>${on?'✓':''}</span> ${s.icon} ${s.label}</li>`;
+    }).join('');
+    return `<div class="skin-section">${g.title}</div><ul class="dash-list">${items}</ul>`;
+  }).join('');
 }
 function prepForDay(key){
   const d = new Date(key + 'T12:00:00');
@@ -1107,7 +1211,10 @@ function renderNightBanner(){
       <li><span class="ck ${h.soakSeeds?'on':'todo'}" data-night="soakSeeds">${h.soakSeeds?'✓':''}</span> ${soak.quantity}</li>
       <li><span class="ck ${h.soakWater?'on':'todo'}" data-night="soakWater">${h.soakWater?'✓':''}</span> ${soak.water}</li>
     </ul>
-    <div class="dash-actions"><button class="btn" id="nightPrepared">${h.soakSeeds && h.soakWater ? '✓ Prepared' : 'Mark Prepared'}</button></div>
+    <div class="dash-actions">
+      <button class="btn" id="nightPrepared">${h.soakSeeds && h.soakWater ? '✓ Prepared' : 'Mark Prepared'}</button>
+      <button class="btn secondary" id="nightSkinPm">${h.skinPmCleanse && h.skinPmMoist ? '✓ Night skin done' : 'Night skin routine'}</button>
+    </div>
   </div>`;
 }
 
@@ -1137,6 +1244,8 @@ function renderHome(){
 
   const goal = settings.waterGoal || 3;
   const wl = h.waterLiters || 0;
+  const skinDone = skinScore(h);
+  const skinTotal = SKIN_STEPS.length;
 
   const dash = document.getElementById('homeDashboard');
   if(!dash) return;
@@ -1189,6 +1298,21 @@ function renderHome(){
           <button class="${h.energy==='ok'?'on':''}" data-v="ok">😐</button>
           <button class="${h.energy==='bad'?'on':''}" data-v="bad">😣</button>
         </div></div>
+    </div>
+    <div class="dash-card">
+      <div class="dc-head">
+        <div><div class="dc-title">5️⃣ Glowing Skin</div>
+          <div class="dc-sub">Inside nourishment + gentle outside care</div></div>
+        <span class="skin-score-pill">${skinDone}/${skinTotal}</span>
+      </div>
+      ${renderSkinChecklist(h)}
+      <div class="dash-actions">
+        <button class="btn secondary" id="markSkinAm">${h.skinAmCleanse && h.skinAmMoist && h.skinAmSpf ? '✓ AM done' : 'Mark AM routine'}</button>
+        <button class="btn secondary" id="markSkinPm">${h.skinPmCleanse && h.skinPmMoist ? '✓ PM done' : 'Mark PM routine'}</button>
+      </div>
+      <div style="margin-top:10px;text-align:center">
+        <button class="btn ghost" data-skin-learn="amroutine" style="padding:10px 14px;font-size:.82rem">📖 Skin guide</button>
+      </div>
     </div>`;
 
 }
@@ -1236,6 +1360,23 @@ function handleHomeDashboardClick(e){
     setTimeout(resumeSmart, 200);
     return;
   }
+  const skinCk = e.target.closest('[data-skin]');
+  if(skinCk){
+    const k = skinCk.dataset.skin;
+    const cur = getDailyHealth();
+    setDailyHealth({ [k]: !cur[k] });
+    return;
+  }
+  if(e.target.closest('#markSkinAm')){
+    setDailyHealth({ skinAmCleanse:true, skinAmMoist:true, skinAmSpf:true });
+    return;
+  }
+  if(e.target.closest('#markSkinPm')){
+    setDailyHealth({ skinPmCleanse:true, skinPmMoist:true });
+    return;
+  }
+  const skinLearn = e.target.closest('[data-skin-learn]');
+  if(skinLearn){ openSkinModal(skinLearn.dataset.skinLearn); return; }
   const soakInfo = e.target.closest('[data-soak]');
   if(soakInfo) openSoakModal(soakInfo.dataset.soak);
 }
@@ -1250,6 +1391,10 @@ function handleNightBannerClick(e){
   }
   if(e.target.closest('#nightPrepared')){
     setDailyHealth({ soakSeeds:true, soakWater:true });
+    return;
+  }
+  if(e.target.closest('#nightSkinPm')){
+    setDailyHealth({ skinPmCleanse:true, skinPmMoist:true });
   }
 }
 
@@ -1257,14 +1402,13 @@ function renderProgressTrends(){
   const el = document.getElementById('progressTrends');
   if(!el) return;
   const hist = LS.get('history', {});
-  const health = LS.get('dailyHealth', {});
   const goal = settings.waterGoal || 3;
-  let gutEm = '', waterPct = 0, mobPct = 0, days = 0;
+  let gutEm = '', waterPct = 0, mobPct = 0, skinPct = 0, days = 0;
 
   for(let i = 6; i >= 0; i--){
     const d = new Date(); d.setDate(d.getDate() - i);
     const k = dateKey(d);
-    const h = Object.assign({ waterLiters:0, bloating:null, energy:null }, health[k] || {});
+    const h = getDailyHealth(k);
     const done = hist[k] || [];
     const avgMood = [h.bloating, h.energy].filter(Boolean);
     if(avgMood.length){
@@ -1274,16 +1418,19 @@ function renderProgressTrends(){
     } else gutEm += '·';
     waterPct += Math.min(100, ((h.waterLiters||0) / goal) * 100);
     mobPct += isMinimumComplete(done) ? 100 : (done.length ? Math.round(done.filter(id=>HOME_MOBILITY.some(m=>m.id===id)).length / HOME_MOBILITY.length * 100) : 0);
+    skinPct += Math.round((skinScore(h) / SKIN_STEPS.length) * 100);
     days++;
   }
   waterPct = Math.round(waterPct / days);
   mobPct = Math.round(mobPct / days);
+  skinPct = Math.round(skinPct / days);
   const streak = LS.get('curHealthStreak', 0);
 
   el.innerHTML = `<h2 class="sec-title" style="margin-top:0">Last 7 Days</h2>
     <div class="trend-block"><h4>Gut Health</h4><div class="trend-emojis">${gutEm}</div></div>
     <div class="trend-block"><h4>Water Intake</h4><div class="trend-pct">${waterPct}%</div></div>
     <div class="trend-block"><h4>Morning Routine</h4><div class="trend-pct">${mobPct}%</div></div>
+    <div class="trend-block"><h4>Skin Routine</h4><div class="trend-pct">${skinPct}%</div></div>
     <div class="trend-block"><h4>Current Streak</h4><div class="trend-pct" style="color:var(--warn)">🔥 ${streak} Days</div></div>`;
 }
 
@@ -1298,6 +1445,18 @@ function renderLearn(){
     ).join('');
     list.querySelectorAll('[data-learn]').forEach(c=>{
       c.addEventListener('click', ()=> openSoakModal(c.dataset.learn));
+    });
+  }
+  const skinList = document.getElementById('skinLearnList');
+  if(skinList){
+    skinList.innerHTML = Object.values(SKIN_LEARN).map(s=>
+      `<div class="learn-card" data-skin-learn="${s.id}">
+        <div class="lc-ic">${s.icon}</div>
+        <div class="lc-meta"><b>${s.name}</b><small>${s.tagline}</small></div>
+        <span style="color:var(--faint)">›</span></div>`
+    ).join('');
+    skinList.querySelectorAll('[data-skin-learn]').forEach(c=>{
+      c.addEventListener('click', ()=> openSkinModal(c.dataset.skinLearn));
     });
   }
   renderSoakCalendar();
@@ -1332,6 +1491,16 @@ function openSoakModal(id){
     <div class="info-block"><h4>Preparation</h4><ul>${s.prep.map(p=>`<li>${p}</li>`).join('')}</ul></div>
     <div class="info-block"><h4>Morning</h4><ul>${s.morning.map(p=>`<li>${p}</li>`).join('')}</ul></div>
     <div class="info-block"><h4>Benefits</h4><ul>${s.benefits.map(p=>`<li>${p}</li>`).join('')}</ul></div>
+    <div class="info-block"><h4>Scientific information</h4><p>${s.science}</p></div>
+    <div class="info-block"><h4>Precautions</h4><p>${s.precautions}</p></div>`;
+  document.getElementById('soakModal').classList.add('open');
+}
+function openSkinModal(id){
+  const s = SKIN_LEARN[id]; if(!s) return;
+  document.getElementById('soakModalTitle').textContent = s.icon + ' ' + s.name;
+  document.getElementById('soakModalBody').innerHTML = `
+    <div class="info-block"><h4>Inside · nourish</h4><ul>${s.inside.map(p=>`<li>${p}</li>`).join('')}</ul></div>
+    <div class="info-block"><h4>Outside · care</h4><ul>${s.outside.map(p=>`<li>${p}</li>`).join('')}</ul></div>
     <div class="info-block"><h4>Scientific information</h4><p>${s.science}</p></div>
     <div class="info-block"><h4>Precautions</h4><p>${s.precautions}</p></div>`;
   document.getElementById('soakModal').classList.add('open');

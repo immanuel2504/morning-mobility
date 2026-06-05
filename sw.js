@@ -1,5 +1,5 @@
 /* Morning Health service worker — offline support */
-const CACHE = 'morning-health-v2';
+const CACHE = 'morning-health-v3';
 const ASSETS = [
   './',
   './index.html',
