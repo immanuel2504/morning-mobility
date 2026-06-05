@@ -138,8 +138,31 @@
   .hero-count { font-size:1.05rem; font-weight:700; }
   .hero-count b { font-size:1.5rem; }
   .hero-sub { color:var(--muted); font-size:.82rem; margin-top:1px; }
-  .hero-actions { display:flex; gap:9px; margin-top:14px; }
-  .hero-actions .btn { flex:1; padding:13px 10px; font-size:.95rem; }
+  .hero-actions { display:flex; gap:9px; margin-top:14px; flex-wrap:wrap; }
+  .hero-actions .btn { flex:1; padding:13px 10px; font-size:.95rem; min-width: calc(50% - 5px); }
+  .hero-actions .btn.wide { flex:1 1 100%; min-width:100%; }
+  .habit-bar { margin-top:14px; padding-top:14px; border-top:1px solid var(--border-soft); }
+  .habit-bar-top { display:flex; justify-content:space-between; align-items:center; font-size:.78rem; color:var(--muted); font-weight:600; margin-bottom:8px; }
+  .habit-bar-top b { color:var(--text); font-size:.9rem; }
+  .habit-track { height:8px; background:var(--surface-3); border-radius:999px; overflow:hidden; border:1px solid var(--border-soft); }
+  .habit-track i { display:block; height:100%; width:0%; border-radius:999px; background:linear-gradient(90deg, var(--brand), var(--brand-2)); transition:width .5s var(--ease); }
+  .habit-msg { margin:10px 0 0; font-size:.8rem; line-height:1.45; color:var(--muted); }
+  .habit-msg.done { color:var(--good); font-weight:600; }
+  .habit-msg.welcome { color:var(--brand); font-weight:600; }
+  .tag-core { font-size:.58rem; font-weight:800; text-transform:uppercase; letter-spacing:.5px; color:var(--brand);
+    border:1px solid color-mix(in srgb, var(--brand) 45%, transparent); border-radius:6px; padding:1px 5px; margin-left:7px; }
+  .habit-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--r-md); padding:18px 16px;
+    margin-bottom:16px; box-shadow:var(--shadow-sm); }
+  .habit-card h3 { margin:0 0 12px; font-size:.95rem; font-weight:800; }
+  .habit-score-row { display:flex; align-items:flex-end; gap:8px; margin-bottom:12px; }
+  .habit-score-row b { font-size:2.4rem; font-weight:800; line-height:1; color:var(--brand); }
+  .habit-score-row span { color:var(--muted); font-size:1rem; font-weight:700; margin-bottom:4px; }
+  .habit-meta { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px; }
+  .habit-meta .hm { background:var(--surface-2); border:1px solid var(--border-soft); border-radius:12px; padding:10px 12px; }
+  .habit-meta .hm b { display:block; font-size:1.2rem; }
+  .habit-meta .hm small { color:var(--muted); font-size:.72rem; }
+  .habit-tip { font-size:.82rem; color:var(--muted); line-height:1.5; margin:0; }
+  .cal .d.habit { background: color-mix(in srgb, var(--good) 55%, var(--brand)); color:var(--brand-ink); font-weight:800; border:none; }
 
   /* ---------- Buttons ---------- */
   .btn { border:none; border-radius:14px; padding:14px 18px; font-size:1rem; font-weight:700; cursor:pointer;
@@ -383,14 +406,20 @@
           <div class="hero-count"><b id="dpDone">0</b> / <span id="dpTotal">21</span></div>
           <div class="hero-sub">exercises done today</div>
           <div class="hero-actions">
-            <button class="btn" id="startBtn">▶ Start</button>
-            <button class="btn ghost" id="resumeBtn">↻ Resume</button>
+            <button class="btn" id="quickBtn">⚡ Quick</button>
+            <button class="btn ghost" id="startBtn">▶ Full</button>
+            <button class="btn ghost wide" id="resumeBtn">↻ Resume where you left off</button>
+          </div>
+          <div class="habit-bar">
+            <div class="habit-bar-top"><span>🎯 Weekly habit</span><b id="habitWeek">0/5</b></div>
+            <div class="habit-track"><i id="habitTrack"></i></div>
+            <p class="habit-msg" id="habitMsg">Complete the 5 core exercises (~15 min) to count a habit day.</p>
           </div>
         </div>
       </div>
     </div>
 
-    <p class="hint" id="routineHint">Tap any exercise to jump to it, or start the guided routine to flow through everything with timers, rest breaks, and voice cues.</p>
+    <p class="hint" id="routineHint">Busy morning? Tap <b>⚡ Quick</b> for 5 core exercises (~15 min) — that counts as a habit day. Or tap <b>▶ Full</b> for the complete routine.</p>
     <div id="exerciseList"></div>
     <span class="reset-link" id="resetToday">Reset today's progress</span>
   </section>
@@ -404,8 +433,17 @@
   <!-- PROGRESS TAB -->
   <section id="tab-progress">
     <h2 class="sec-title">📈 Your Progress</h2>
+    <div class="habit-card">
+      <h3>🎯 Habit Building</h3>
+      <div class="habit-score-row"><b id="habitScore">0</b><span>/ 10</span></div>
+      <div class="habit-meta">
+        <div class="hm"><b id="habitWeekProg">0/5</b><small>habit days this week</small></div>
+        <div class="hm"><b id="stMinStreak">0</b><small>minimum-day streak 🔥</small></div>
+      </div>
+      <p class="habit-tip" id="habitTip">A habit day = 5 core exercises (~15 min). Full routine is a bonus.</p>
+    </div>
     <div class="stat-grid">
-      <div class="stat"><b id="stStreak">0</b><span>Current streak</span></div>
+      <div class="stat"><b id="stStreak">0</b><span>Any activity streak</span></div>
       <div class="stat"><b id="stBest">0</b><span>Best streak</span></div>
       <div class="stat"><b id="stTotal">0</b><span>Days done</span></div>
     </div>
@@ -413,7 +451,7 @@
       <h3 class="sec-title" style="font-size:.95rem; margin:0 0 12px">Last 28 days</h3>
       <div class="cal" id="calendar"></div>
     </div>
-    <p class="hint">A full square = whole routine completed that day. A faded square = partial.</p>
+    <p class="hint">Bright = habit minimum done. Full colour = entire routine done. Faded = partial.</p>
   </section>
 
   <!-- PLAN TAB -->
@@ -489,6 +527,14 @@
     <div class="opt">
       <div class="l">🧘 Essentials only<small>Skip the optional warm-towel step</small></div>
       <label class="switch"><input type="checkbox" id="setEssential"><span class="slider"></span></label>
+    </div>
+    <div class="opt">
+      <div class="l">🎯 Weekly habit goal<small>Target habit days per week (5 core exercises)</small></div>
+      <div class="stepper">
+        <button id="habitMinus">−</button>
+        <b id="habitVal">5</b>
+        <button id="habitPlus">+</button>
+      </div>
     </div>
     <div class="opt">
       <div class="l">⏱️ Rest between exercises</div>
@@ -616,6 +662,9 @@ const WEEK_PLAN = [
   { h:'Weeks 5–8 · Strength', items:['Regular push-ups','Assisted / full pull-ups if pain-free'] },
 ];
 
+/* 5 core exercises (~15 min) — counts as a "habit day" even without the full routine */
+const MINIMUM_IDS = ['belly','chintuck','catcow','child','mountain'];
+
 /* ---------------- STORAGE ---------------- */
 const todayKey = () => new Date().toISOString().slice(0,10);
 const LS = {
@@ -623,7 +672,7 @@ const LS = {
   set(k, v){ localStorage.setItem(k, JSON.stringify(v)); }
 };
 
-const defSettings = { sound:true, voice:true, breathGuide:true, autoAdvance:true, wake:true, essential:false, restSec:15, theme:null };
+const defSettings = { sound:true, voice:true, breathGuide:true, autoAdvance:true, wake:true, essential:false, restSec:15, habitGoal:5, theme:null };
 let settings = Object.assign({}, defSettings, LS.get('settings', {}));
 function saveSettings(){ LS.set('settings', settings); }
 
@@ -641,15 +690,104 @@ function toggleDone(id){
 }
 function markDone(id){ const d = getDone(); if(!d.includes(id)){ setDone([...d, id]); } }
 
+function isMinimumComplete(doneIds){ return MINIMUM_IDS.every(id => doneIds.includes(id)); }
+function isFullComplete(doneIds){
+  const list = activeList();
+  return list.length > 0 && list.every(e => doneIds.includes(e.id));
+}
+function minimumFlow(){ return MINIMUM_IDS.map(id => EXERCISES.find(e => e.id === id)).filter(Boolean); }
+
+function weekHabitDays(){
+  const all = LS.get('history', {});
+  let n = 0;
+  for(let i = 0; i < 7; i++){
+    const d = new Date(); d.setDate(d.getDate() - i);
+    if(isMinimumComplete(all[d.toISOString().slice(0,10)] || [])) n++;
+  }
+  return n;
+}
+
+function habitScore10(){
+  const goal = settings.habitGoal || 5;
+  return Math.round(Math.min(10, (weekHabitDays() / goal) * 10));
+}
+
+function daysSinceLastActivity(){
+  const all = LS.get('history', {});
+  for(let i = 1; i < 60; i++){
+    const d = new Date(); d.setDate(d.getDate() - i);
+    if((all[d.toISOString().slice(0,10)] || []).length) return i;
+  }
+  return 99;
+}
+
+function habitTipText(){
+  const score = habitScore10();
+  const week = weekHabitDays();
+  const goal = settings.habitGoal || 5;
+  if(score >= 10) return 'Outstanding week. Keep the minimum on off-days; add full routine when you have time.';
+  if(score >= 8) return 'Strong habit week. One more minimum day locks it in.';
+  if(score >= 6) return 'You are at 6/10 — solid base. Use ⚡ Quick on busy mornings to reach ' + goal + '/' + goal + '.';
+  if(week === 0) return 'Start with ⚡ Quick (~15 min). Five exercises = habit day won.';
+  return (goal - week) + ' more habit day' + (goal - week > 1 ? 's' : '') + ' this week. Quick routine counts.';
+}
+
 function updateStreak(){
   const all = LS.get('history', {});
-  let cur = 0; let cursor = new Date();
   const key = d => d.toISOString().slice(0,10);
-  if(!(all[key(cursor)]?.length)) cursor.setDate(cursor.getDate()-1);
-  while(all[key(cursor)]?.length){ cur++; cursor.setDate(cursor.getDate()-1); }
-  let best = LS.get('bestStreak',0);
-  if(cur>best){ best=cur; LS.set('bestStreak',best); }
+
+  let cur = 0; let cursor = new Date();
+  if(!(all[key(cursor)]?.length)) cursor.setDate(cursor.getDate() - 1);
+  while(all[key(cursor)]?.length){ cur++; cursor.setDate(cursor.getDate() - 1); }
+  let best = LS.get('bestStreak', 0);
+  if(cur > best){ best = cur; LS.set('bestStreak', best); }
   LS.set('curStreak', cur);
+
+  let minCur = 0; cursor = new Date();
+  if(!isMinimumComplete(all[key(cursor)] || [])) cursor.setDate(cursor.getDate() - 1);
+  while(isMinimumComplete(all[key(cursor)] || [])){ minCur++; cursor.setDate(cursor.getDate() - 1); }
+  let minBest = LS.get('bestMinStreak', 0);
+  if(minCur > minBest){ minBest = minCur; LS.set('bestMinStreak', minBest); }
+  LS.set('curMinStreak', minCur);
+}
+
+function renderHabitUI(){
+  const done = getDone();
+  const goal = settings.habitGoal || 5;
+  const week = weekHabitDays();
+  const minToday = isMinimumComplete(done);
+
+  const hw = document.getElementById('habitWeek');
+  const ht = document.getElementById('habitTrack');
+  const hm = document.getElementById('habitMsg');
+  if(hw) hw.textContent = week + '/' + goal + ' this week';
+  if(ht) ht.style.width = Math.min(100, (week / goal) * 100) + '%';
+
+  if(hm){
+    const gap = daysSinceLastActivity();
+    if(minToday){
+      hm.textContent = '✓ Habit day done! Full routine is optional today.';
+      hm.className = 'habit-msg done';
+    } else if(gap > 1){
+      hm.textContent = 'Welcome back — ⚡ Quick habit (~15 min) is enough for today.';
+      hm.className = 'habit-msg welcome';
+    } else if(week >= goal){
+      hm.textContent = '🎉 Weekly goal reached! Full routine is a bonus.';
+      hm.className = 'habit-msg done';
+    } else {
+      hm.textContent = (goal - week) + ' habit day' + (goal - week > 1 ? 's' : '') + ' left this week. Quick counts.';
+      hm.className = 'habit-msg';
+    }
+  }
+
+  const hs = document.getElementById('habitScore');
+  const hwp = document.getElementById('habitWeekProg');
+  const hms = document.getElementById('stMinStreak');
+  const htip = document.getElementById('habitTip');
+  if(hs) hs.textContent = habitScore10();
+  if(hwp) hwp.textContent = week + '/' + goal;
+  if(hms) hms.textContent = LS.get('curMinStreak', 0);
+  if(htip) htip.textContent = habitTipText();
 }
 
 /* ---------------- THEME ---------------- */
@@ -682,9 +820,10 @@ function renderList(){
     }
     const isDone = done.includes(ex.id);
     const dim = settings.essential && ex.optional ? 'dim' : '';
+    const core = MINIMUM_IDS.includes(ex.id) ? '<span class="tag-core">core</span>' : '';
     html+=`<div class="ex-card ${isDone?'done':''} ${dim}" data-open="${ex.id}">
       <div class="ex-ic">${ex.icon}</div>
-      <div class="ex-meta"><div class="nm">${ex.name}${ex.optional?'<span class="tag">optional</span>':''}</div><div class="sub">${ex.prescr}</div></div>
+      <div class="ex-meta"><div class="nm">${ex.name}${core}${ex.optional?'<span class="tag">optional</span>':''}</div><div class="sub">${ex.prescr}</div></div>
       <div class="ex-check">✓</div>
     </div>`;
   });
@@ -723,12 +862,16 @@ function renderProgress(){
   for(let i=27;i>=0;i--){
     const d = new Date(); d.setDate(d.getDate()-i);
     const k = d.toISOString().slice(0,10);
-    const cnt = (all[k]||[]).length;
-    const cls = cnt>=total ? 'full' : cnt>0 ? 'part':'';
+    const dayDone = all[k] || [];
+    const cnt = dayDone.length;
+    let cls = cnt > 0 ? 'part' : '';
+    if(isFullComplete(dayDone)) cls = 'full';
+    else if(isMinimumComplete(dayDone)) cls = 'habit';
     const today = i===0 ? 'today':'';
-    c+=`<div class="d ${cls} ${today}" title="${k}: ${cnt} done">${d.getDate()}</div>`;
+    c+=`<div class="d ${cls} ${today}" title="${k}: ${cnt} done${isMinimumComplete(dayDone)?' · habit day':''}">${d.getDate()}</div>`;
   }
   cal.innerHTML=c;
+  renderHabitUI();
 }
 
 /* ---------------- RENDER: checklist ---------------- */
@@ -978,11 +1121,26 @@ function segments(ex){
 }
 
 function openGuided(){ flow = activeList(); guided = true; pIdx = 0; openCommon(); }
+function openQuickGuided(){ flow = minimumFlow(); guided = true; pIdx = 0; openCommon(); }
 function resumeGuided(){
   flow = activeList(); guided = true;
   const doneIds = getDone();
   let idx = flow.findIndex(e=>!doneIds.includes(e.id));
   pIdx = idx<0 ? 0 : idx;
+  openCommon();
+}
+function resumeSmart(){
+  const doneIds = getDone();
+  if(!isMinimumComplete(doneIds)){
+    flow = minimumFlow();
+    let idx = flow.findIndex(e => !doneIds.includes(e.id));
+    pIdx = idx < 0 ? 0 : idx;
+  } else {
+    flow = activeList();
+    let idx = flow.findIndex(e => !doneIds.includes(e.id));
+    pIdx = idx < 0 ? 0 : idx;
+  }
+  guided = true;
   openCommon();
 }
 function openSingle(id){ flow = EXERCISES; guided = false; pIdx = EXERCISES.findIndex(e=>e.id===id); openCommon(); }
@@ -1212,21 +1370,37 @@ function renderComplete(){
   if(timer) clearInterval(timer); if(restTimer) clearInterval(restTimer);
   pControls.style.display='none';
   document.getElementById('pProgBar').style.width = '100%';
-  const list = activeList(); const doneIds=getDone();
-  const done = list.filter(e=>doneIds.includes(e.id)).length;
+  const doneIds = getDone();
+  const list = activeList();
+  const done = list.filter(e => doneIds.includes(e.id)).length;
+  const habitDone = isMinimumComplete(doneIds);
+  const fullDone = isFullComplete(doneIds);
+  const score = habitScore10();
+
   beep(660,.15,.25); setTimeout(()=>beep(880,.15,.25),160); setTimeout(()=>beep(1100,.35,.3),320);
-  vibrate([120,80,120]); say('Great work! Routine complete.');
+  vibrate([120,80,120]);
+  if(habitDone) say('Habit day complete. Great work.');
+  else say('Great work! Session complete.');
+
+  const title = fullDone ? 'Full routine complete!' : habitDone ? 'Habit day complete!' : 'Session complete!';
+  const sub = habitDone && !fullDone
+    ? 'You hit the 5 core exercises — that counts. Add more anytime.'
+    : fullDone ? 'Nice work taking care of your body today.'
+    : 'Every bit helps. Try ⚡ Quick tomorrow for an easy habit win.';
+
   pBody.innerHTML = `<div class="done-screen">
-    <div class="burst">🎉</div>
-    <h2>Routine complete!</h2>
-    <p>Nice work taking care of your body today.</p>
+    <div class="burst">${habitDone ? '🎯' : '🎉'}</div>
+    <h2>${title}</h2>
+    <p>${sub}</p>
     <div class="done-stats">
       <div class="s"><b>${done}/${list.length}</b><span>exercises</span></div>
-      <div class="s"><b>${LS.get('curStreak',0)}</b><span>day streak 🔥</span></div>
+      <div class="s"><b>${LS.get('curMinStreak',0)}</b><span>habit streak 🔥</span></div>
+      <div class="s"><b>${score}/10</b><span>habit score</span></div>
     </div>
     <button class="btn" id="doneHome" style="max-width:320px;">Back to home</button>
   </div>`;
   document.getElementById('doneHome').addEventListener('click', ()=>{ closePlayer(); goTab('progress'); });
+  renderHabitUI();
 }
 
 /* player controls */
@@ -1237,8 +1411,9 @@ document.getElementById('pSkip').addEventListener('click', ()=>{
   stopTimer(); stopBreathGuide(); if(restTimer) clearInterval(restTimer);
   if(pIdx<flow.length-1){ pIdx++; renderPlayer(); } else renderComplete();
 });
+document.getElementById('quickBtn').addEventListener('click', openQuickGuided);
 document.getElementById('startBtn').addEventListener('click', openGuided);
-document.getElementById('resumeBtn').addEventListener('click', resumeGuided);
+document.getElementById('resumeBtn').addEventListener('click', resumeSmart);
 document.getElementById('resetToday').addEventListener('click', ()=>{
   if(confirm("Reset today's progress?")){ setDone([]); renderAll(); }
 });
@@ -1253,6 +1428,7 @@ function syncSettingsUI(){
   document.getElementById('setAuto').checked=settings.autoAdvance;
   document.getElementById('setWake').checked=settings.wake;
   document.getElementById('setEssential').checked=settings.essential;
+  document.getElementById('habitVal').textContent=settings.habitGoal;
   document.getElementById('restVal').textContent=settings.restSec;
 }
 document.getElementById('openSettings').addEventListener('click', ()=>{ syncSettingsUI(); settingsModal.classList.add('open'); });
@@ -1268,6 +1444,8 @@ bindToggle('setBreath','breathGuide');
 bindToggle('setAuto','autoAdvance');
 bindToggle('setWake','wake', ()=>{ settings.wake ? requestWake() : releaseWake(); });
 bindToggle('setEssential','essential', renderAll);
+document.getElementById('habitPlus').addEventListener('click', ()=>{ settings.habitGoal=Math.min(7,settings.habitGoal+1); document.getElementById('habitVal').textContent=settings.habitGoal; saveSettings(); renderHabitUI(); });
+document.getElementById('habitMinus').addEventListener('click', ()=>{ settings.habitGoal=Math.max(3,settings.habitGoal-1); document.getElementById('habitVal').textContent=settings.habitGoal; saveSettings(); renderHabitUI(); });
 document.getElementById('restPlus').addEventListener('click', ()=>{ settings.restSec=Math.min(120,settings.restSec+5); document.getElementById('restVal').textContent=settings.restSec; saveSettings(); });
 document.getElementById('restMinus').addEventListener('click', ()=>{ settings.restSec=Math.max(0,settings.restSec-5); document.getElementById('restVal').textContent=settings.restSec; saveSettings(); });
 
